@@ -41,6 +41,16 @@ export const Navbar = () => {
           <li>
             <Link
               className={` hover:text-gray-900 ${
+                isActive("/about") ? "text-primary" : "text-gray-700"
+              } font-medium`}
+              href={"/about"}
+            >
+              About
+            </Link>
+          </li>
+          <li>
+            <Link
+              className={` hover:text-gray-900 ${
                 isActive("/contact") ? "text-primary" : "text-gray-700"
               } font-medium`}
               href={"/contact"}
