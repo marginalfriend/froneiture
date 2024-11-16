@@ -2,14 +2,14 @@ import Image from "next/image";
 
 export const Navbar = () => {
   return (
-    <header className="w-screen flex justify-between px-6 py-4">
+    <header className="w-screen  flex justify-between px-6 py-4 gap-10">
       <div className="flex items-center align-middle w-[20%]">
         <Image src="/logo.png" alt="froneiture-logo" width={40} height={40} />
         <h1 className="text-xl font-semibold">FroNeiture</h1>
       </div>
 
       <nav className="w-[60%] h-full flex align-middle my-auto">
-        <ul className="inline-flex justify-between w-full font-medium	">
+        <ul className="inline-flex justify-between w-full font-medium	text-sm">
           <li>Home</li>
           <li>Products</li>
           <li>Contact Us</li>
