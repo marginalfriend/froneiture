@@ -23,7 +23,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 py-10 gap-10 overflow-x-hidden">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 py-10 gap-10 overflow-x-hidden px-6">
         <div>
           <div className="flex flex-col align-middle justify-center col-span-1">
             <Image
