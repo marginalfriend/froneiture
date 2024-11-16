@@ -10,7 +10,7 @@ export const Navbar = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="w-screen  flex justify-between px-4 py-2 md:px-6 md:py-4 gap-10 z-50 bg-white">
+    <header className="w-screen  flex justify-between px-4 py-2 md:px-6 md:py-1 gap-10 z-50 bg-white">
       <div className="flex items-center align-middle w-[20%]">
         <Image src="/logo.png" alt="froneiture-logo" width={40} height={40} />
         <h1 className="text-xl font-semibold">FroNeiture</h1>
@@ -21,7 +21,7 @@ export const Navbar = () => {
           <li>
             <Link
               className={` hover:text-gray-900 ${
-                isActive("/") ? "text-primary" : "text-gray-700"
+                isActive("/") ? "text-primary" : "text-gray-500"
               } font-medium`}
               href={"/"}
             >
@@ -31,7 +31,7 @@ export const Navbar = () => {
           <li>
             <Link
               className={` hover:text-gray-900 ${
-                isActive("/products") ? "text-primary" : "text-gray-700"
+                isActive("/products") ? "text-primary" : "text-gray-500"
               } font-medium`}
               href={"/products"}
             >
@@ -41,7 +41,7 @@ export const Navbar = () => {
           <li>
             <Link
               className={` hover:text-gray-900 ${
-                isActive("/about") ? "text-primary" : "text-gray-700"
+                isActive("/about") ? "text-primary" : "text-gray-500"
               } font-medium`}
               href={"/about"}
             >
@@ -51,7 +51,7 @@ export const Navbar = () => {
           <li>
             <Link
               className={` hover:text-gray-900 ${
-                isActive("/contact") ? "text-primary" : "text-gray-700"
+                isActive("/contact") ? "text-primary" : "text-gray-500"
               } font-medium`}
               href={"/contact"}
             >
@@ -61,7 +61,7 @@ export const Navbar = () => {
           <li>
             <Link
               className={` hover:text-gray-900 ${
-                isActive("/order") ? "text-primary" : "text-gray-700"
+                isActive("/order") ? "text-primary" : "text-gray-500"
               } font-medium`}
               href={"/order"}
             >
