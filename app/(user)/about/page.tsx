@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { Button } from "../_components/button";
+import { Button } from "../../_components/button";
 import InteriorStepsSlider from "./components/interior-steps-slider";
 
 const Page = () => {

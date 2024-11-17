@@ -1,5 +1,5 @@
 import React from "react";
-import Select from "../_components/select";
+import Select from "../../_components/select";
 import ProductCard from "./components/product-card";
 
 const Products = () => {
