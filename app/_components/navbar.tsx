@@ -74,7 +74,7 @@ export const Navbar = () => {
       </nav>
 
       <div className="hidden md:flex w-[20%] px-4 justify-around items-center">
-        <Button variant="ghost" className="w-min px-2 py-2">
+        <Button variant="ghost" className="w-min h-min px-2 py-2">
           <ShoppingBag />
         </Button>
 
