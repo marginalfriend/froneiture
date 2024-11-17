@@ -55,7 +55,7 @@ const MobileNav: React.FC = () => {
             <li>
               <Link
                 className={` hover:text-gray-900 ${
-                  isActive("/") ? "text-primary" : "text-gray-700"
+                  isActive("/") ? "text-primary" : "text-black"
                 } font-medium`}
                 href="/"
               >
@@ -65,7 +65,7 @@ const MobileNav: React.FC = () => {
             <li>
               <Link
                 className={` hover:text-gray-900 ${
-                  isActive("/products") ? "text-primary" : "text-gray-700"
+                  isActive("/products") ? "text-primary" : "text-black"
                 } font-medium`}
                 href="/products"
               >
@@ -75,7 +75,7 @@ const MobileNav: React.FC = () => {
             <li>
               <Link
                 className={` hover:text-gray-900 ${
-                  isActive("/about") ? "text-primary" : "text-gray-700"
+                  isActive("/about") ? "text-primary" : "text-black"
                 } font-medium`}
                 href="/about"
               >
@@ -85,7 +85,7 @@ const MobileNav: React.FC = () => {
             <li>
               <Link
                 className={` hover:text-gray-900 ${
-                  isActive("/contact") ? "text-primary" : "text-gray-700"
+                  isActive("/contact") ? "text-primary" : "text-black"
                 } font-medium`}
                 href="/contact"
               >
@@ -95,7 +95,7 @@ const MobileNav: React.FC = () => {
             <li>
               <Link
                 className={` hover:text-gray-900 ${
-                  isActive("/order") ? "text-primary" : "text-gray-700"
+                  isActive("/order") ? "text-primary" : "text-black"
                 } font-medium`}
                 href="/order"
               >

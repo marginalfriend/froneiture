@@ -4,7 +4,7 @@ import { Button } from "../_components/button";
 
 const Page = () => {
   return (
-    <main className="w-screen">
+    <main className="w-full">
       <div className="relative w-full h-[442px]">
         <div className="absolute inset-0 overflow-x-hidden">
           <Image
@@ -25,7 +25,7 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 px-20 gap-10 py-12">
+      <div className="grid grid-cols-1 md:grid-cols-3 px-32 gap-10 py-12">
         <div className="border-2 border-primary rounded-2xl text-center space-y-4 px-6 py-8">
           <h1 className="font-semibold text-xl">Interior Consultation</h1>
           <p>

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="w-screen min-h-screen overflow-x-hidden">
+    <main className="w-full min-h-screen overflow-x-hidden">
       <div className="relative w-full h-[442px]">
         <div className="absolute inset-0 overflow-x-hidden">
           <Image
