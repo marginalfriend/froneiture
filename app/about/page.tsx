@@ -1,10 +1,11 @@
 import Image from "next/image";
 import React from "react";
 import { Button } from "../_components/button";
+import InteriorStepsSlider from "./components/interior-steps-slider";
 
 const Page = () => {
   return (
-    <main className="w-full space-y-4 p-10">
+    <main className="w-full space-y-4 p-4 md:p-10">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="col-span-1 space-y-8">
           <h1 className="text-5xl font-bold">Interior Design & Build</h1>
@@ -13,10 +14,10 @@ const Page = () => {
             ditujukan untuk Konsumen Akhir dan Pengembang Real Estat di sektor
             perumahan di wilayah Jabodetabek.
           </p>
-					<Button variant="primary">Contact Us</Button>
+          <Button variant="primary">Contact Us</Button>
         </div>
 
-        <div className="col-span-1 md:col-span-2 flex w-full gap-6">
+        <div className="col-span-1 md:col-span-2 flex flex-col md:flex-row w-full gap-6">
           <StatCard
             imageSrc="/about-1.png"
             number="1000+"
@@ -34,6 +35,7 @@ const Page = () => {
           />
         </div>
       </div>
+      <InteriorStepsSlider />
     </main>
   );
 };
@@ -47,7 +49,7 @@ interface StatCardProps {
 }
 
 const StatCard = ({ number, text, imageSrc }: StatCardProps) => (
-  <div className="relative h-[403px] w-[264px] rounded-3xl overflow-hidden group">
+  <div className="relative w-[246px] md:w-[264px] aspect-[13/20] rounded-3xl overflow-hidden group">
     {/* Background Image */}
     <Image
       src={imageSrc}
