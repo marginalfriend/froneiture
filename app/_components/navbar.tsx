@@ -4,13 +4,15 @@ import Image from "next/image";
 import MobileNav from "./mobile-nav";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "./button";
+import { ShoppingBag } from "lucide-react";
 
 export const Navbar = () => {
   const pathname = usePathname();
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="w-full  flex justify-between px-4 py-2 md:px-6 md:py-1 gap-10 z-50 bg-white">
+    <header className="w-full  flex justify-between px-4 py-2 md:px-6 md:py-3 gap-10 z-50 bg-white">
       <div className="flex items-center align-middle w-[20%]">
         <Image src="/logo.png" alt="froneiture-logo" width={40} height={40} />
         <h1 className="text-xl font-semibold">FroNeiture</h1>
@@ -71,30 +73,12 @@ export const Navbar = () => {
         </ul>
       </nav>
 
-      <div className="hidden md:flex w-[20%] gap-2 justify-end align-middle">
-        <div className="flex gap-1 my-auto">
-          <Image
-            src="/en.png"
-            width={24}
-            height={24}
-            alt="en-US"
-            className="w-[24px] h-[24px]"
-          />
-          <p>EN</p>
-        </div>
+      <div className="hidden md:flex w-[20%] px-4 justify-around items-center">
+        <Button variant="ghost" className="w-min px-2 py-2">
+          <ShoppingBag />
+        </Button>
 
-        <div className="w-[1px] h-[50%] my-auto bg-black" />
-
-        <div className="flex gap-1 my-auto">
-          <Image
-            src="/id.png"
-            width={24}
-            height={24}
-            alt="id-ID"
-            className="w-[24px] h-[24px]"
-          />
-          <p>ID</p>
-        </div>
+        <Button variant="primary">Login</Button>
       </div>
 
       <MobileNav />

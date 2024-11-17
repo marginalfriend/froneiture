@@ -15,7 +15,7 @@ const MobileNav: React.FC = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="bg-white border-gray-200">
+    <nav className="bg-white border-gray-200 md:hidden">
       <div className="container mx-auto px-4 flex justify-between items-center h-16">
         <button
           onClick={toggleMenu}
