@@ -49,7 +49,7 @@ const Products = () => {
           />
           <Select name={"Cities"} placeholder="Cities" options={cities} />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:px-20">
           {products.map((props, index) => (
             <ProductCard {...props} key={index} />
           ))}
