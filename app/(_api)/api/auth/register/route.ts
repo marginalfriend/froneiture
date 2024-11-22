@@ -1,5 +1,8 @@
 import prisma from "@/prisma/client/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from "@/constants/env";
 
 async function getDefaultCustomerRole() {
 	let role = await prisma.role.findUnique({
@@ -63,14 +66,13 @@ export async function POST(req: NextRequest) {
 			}
 		});
 
-		// Generate JWT
 		const token = jwt.sign(
 			{
 				id: account.id,
 				email: account.email,
 				roles: account.roles.map(ar => ar.role.name)
 			},
-			JWT_SECRET,
+			JWT_SECRET!,
 			{ expiresIn: '1h' }
 		);
 

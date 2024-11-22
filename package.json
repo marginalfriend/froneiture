@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+		"init": "npm install && npx prisma migrate dev && node ./prisma/seed/admin.mjs"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
