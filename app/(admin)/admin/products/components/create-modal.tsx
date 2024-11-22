@@ -12,16 +12,12 @@ export const CreateModal = () => {
   return (
     <>
       <Button onClick={openModal}>Add</Button>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        title="Add New Product"
-      >
-				<form>
-					<Label>Product Name</Label>
-					<Input placeholder="Product Name"/>
-				</form>
-			</Modal>
+      <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New Product">
+        <form>
+          <Label>Product Name</Label>
+          <Input placeholder="Type product name here" />
+        </form>
+      </Modal>
     </>
   );
 };
