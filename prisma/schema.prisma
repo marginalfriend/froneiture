@@ -9,17 +9,60 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model Location {
+// Account Management
+
+enum RoleType {
+  SUPER_ADMIN
+  ADMIN
+  CUSTOMER
+}
+
+model Role {
+  id       String        @id @default(uuid())
+  name     RoleType      @unique
+  accounts AccountRole[]
+}
+
+model Account {
+  id       String        @id @default(uuid())
+  email    String        @unique
+  password String
+  user     User?
+  roles    AccountRole[]
+}
+
+model AccountRole {
+  id        String @id @default(uuid())
+  accountId String
+  roleId    String
+
+  account Account @relation(fields: [accountId], references: [id])
+  role    Role    @relation(fields: [roleId], references: [id])
+}
+
+model User {
+  id          String  @id @default(uuid())
+  accountId   String  @unique
+  name        String
+  phoneNumber String?
+  orders      Order[]
+  cart        Cart[]
+  account     Account @relation(fields: [accountId], references: [id])
+}
+
+// Product Management
+
+model UnitType {
   id      Int       @id @default(autoincrement())
   name    String
   Product Product[]
 }
 
-model UnitType {
+model Location {
   id      Int       @id @default(autoincrement())
   name    String
   Product Product[]
@@ -32,16 +75,18 @@ model DesignStyle {
 }
 
 model Product {
-  id            String      @id @default(uuid())
+  id            String        @id @default(uuid())
   name          String
   description   String
-  designStyle   DesignStyle @relation(fields: [designStyleId], references: [id])
+  designStyle   DesignStyle   @relation(fields: [designStyleId], references: [id])
   designStyleId Int
-  unitType      UnitType    @relation(fields: [unitTypeId], references: [id])
+  unitType      UnitType      @relation(fields: [unitTypeId], references: [id])
   unitTypeId    Int
-  location      Location    @relation(fields: [locationId], references: [id])
+  location      Location      @relation(fields: [locationId], references: [id])
   locationId    Int
   images        Image[]
+  OrderDetail   OrderDetail[]
+  Cart          Cart[]
 }
 
 model Image {
@@ -57,4 +102,41 @@ model Image {
   updatedAt   DateTime @updatedAt
   Product     Product? @relation(fields: [productId], references: [id])
   productId   String?
+}
+
+// Order Management
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+model Order {
+  id            String        @id @default(uuid())
+  customerId    String
+  orderDate     DateTime      @default(now())
+  totalPrice    Int
+  customer      User          @relation(fields: [customerId], references: [id])
+  paymentStatus PaymentStatus
+  orderDetails  OrderDetail[]
+}
+
+model OrderDetail {
+  id           String  @id @default(uuid())
+  orderId      String
+  itemId       String
+  quantity     Int
+  countedPrice Int
+  order        Order   @relation(fields: [orderId], references: [id])
+  product      Product @relation(fields: [itemId], references: [id])
+}
+
+model Cart {
+  id        String  @id @default(uuid())
+  userId    String
+  productId String
+  quantity  Int
+  user      User    @relation(fields: [userId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
 }
