@@ -10,25 +10,30 @@ interface SelectProps {
   className?: string;
 }
 
-const Select: React.FC<SelectProps> = ({
-  className,
-  name,
-  id,
-  options,
-  placeholder = "Select an option",
-  onChange,
-  value,
-}) => {
+const Select: React.FC<SelectProps> = (props) => {
+  const {
+    className,
+    name,
+    id,
+    options,
+    placeholder = "Select an option",
+    onChange,
+    value,
+  } = props;	
   return (
     <div className={`relative w-64 ${className}`}>
       <select
         name={name}
         id={id || name}
-        className="text-sm md:text-md appearance-none w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="text-sm md:text-md appearance-none w-full px-4 py-2 bg-white border border-gray-300 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
         onChange={onChange}
         value={value}
       >
-        {placeholder && <option value="" className="text-gray-500">{placeholder}</option>}
+        {placeholder && (
+          <option value="" className="text-gray-500">
+            {placeholder}
+          </option>
+        )}
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

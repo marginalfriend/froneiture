@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 			designStyleId,
 			unitTypeId,
 			locationId,
-			images
+			imageIds
 		} = await req.json();
 
 		// Validate required fields
@@ -27,15 +27,9 @@ export async function POST(req: NextRequest) {
 				designStyleId: Number(designStyleId),
 				unitTypeId: Number(unitTypeId),
 				locationId: Number(locationId),
-				images: images ? {
-					create: images.map((image: Image) => ({
-						fileName: image.fileName,
-						path: image.path,
-						size: image.size,
-						mimeType: image.mimeType,
-						width: image.width,
-						height: image.height,
-						description: image.description
+				images: imageIds ? {
+					connect: imageIds.map((id: string) => ({
+						id: id
 					}))
 				} : undefined
 			},

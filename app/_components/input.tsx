@@ -4,7 +4,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 export const Input = (props: InputProps) => {
-  return <input {...props} className="border px-2 py-1 rounded-full w-full" />;
+  return <input {...props} className="border px-4 py-2 rounded-full w-full text-sm" />;
 };
 
 export const Label = (props: LabelHTMLAttributes<HTMLLabelElement>) => {

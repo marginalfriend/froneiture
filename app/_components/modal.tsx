@@ -18,7 +18,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
           <h3 className="text-lg font-bold">{title}</h3>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-gray-700 text-2xl mb-2"
             aria-label="Close Modal"
           >
             &times;
@@ -30,13 +30,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
 
         {/* Footer */}
         <div className="mt-6 flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300"
-          >
-            Close
-          </button>
-        </div>
+
+				</div>
       </div>
     </div>
   );
