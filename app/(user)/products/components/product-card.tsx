@@ -7,6 +7,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   name,
   location,
   images,
+	
 }) => {
   console.log(images);
   return (

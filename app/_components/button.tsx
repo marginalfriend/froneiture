@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import React from "react";
 
 export const Button = (props: ButtonProps) => {
@@ -20,7 +21,7 @@ export const Button = (props: ButtonProps) => {
   return (
     <button
       {...props}
-      className={`px-5 py-2 h-min text-sm ${getVariant(variant)} ${className}`}
+      className={cn("px-5 py-2 h-min text-sm", getVariant(variant), className)}
     >
       {children}
     </button>

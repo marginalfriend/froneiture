@@ -4,7 +4,7 @@ import { Button } from "@/app/_components/button";
 import { Input, Label } from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
 import Select from "@/app/_components/select";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 
@@ -38,6 +38,27 @@ export const CreateModal = () => {
   });
   const [previews, setPreviews] = useState<string[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
+  const [designStyles, setDesignStyles] = useState([]);
+  const [unitTypes, setUnitTypes] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const designRes = await fetch("/api/unit/design-style");
+
+      const { data: designs } = await designRes.json();
+
+      setDesignStyles(designs);
+
+      const locationRes = await fetch("/api/unit/type");
+
+      const { data: types } = await locationRes.json();
+
+      setUnitTypes(types);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const MAX_IMAGES = 10;
@@ -140,12 +161,16 @@ export const CreateModal = () => {
       ["designStyleId", "Design Style"],
       ["unitTypeId", "Unit Type"],
       ["locationId", "Location"],
+      ["images", "Image"],
     ];
     const missingFields = requiredFields
       .filter(
         (field) =>
           !formState[field[0]] ||
-          (typeof formState[field[0]] === "number" && formState[field[0]] === 0)
+          (typeof formState[field[0]] === "number" &&
+            formState[field[0]] === 0) ||
+          (typeof formState[field[0]] === "object" &&
+            !(formState[field[0]] as File[])[0])
       )
       .map((field) => field[1]);
 
@@ -209,11 +234,15 @@ export const CreateModal = () => {
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
       <Button onClick={openModal}>Add</Button>
       <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New Product">
-        <form className="space-y-4">
+        <form className="space-y-4 px-1">
           <div>
             <Label>Product Name</Label>
             <Input
@@ -238,10 +267,7 @@ export const CreateModal = () => {
               name={"select-design-style"}
               value={String(formState.designStyleId)}
               onChange={(e) => handleChange("designStyleId", e.target.value)}
-              options={[
-                { name: "Design 1", id: "1" },
-                { name: "Design 2", id: "2" },
-              ]}
+              options={designStyles}
             />
           </div>
           <div>
@@ -252,10 +278,7 @@ export const CreateModal = () => {
               name={"select-unit-type"}
               value={String(formState.unitTypeId)}
               onChange={(e) => handleChange("unitTypeId", e.target.value)}
-              options={[
-                { name: "Unit 1", id: "1" },
-                { name: "Unit 2", id: "2" },
-              ]}
+              options={unitTypes}
             />
           </div>
           <div>

@@ -19,7 +19,7 @@ export const AdminNavlinks = () => {
               <Button
                 variant="ghost"
                 className={`w-full text-left ${
-                  isActive(route.route) && "bg-gray-100"
+                  isActive(route.route) && "bg-gray-200 hover:bg-gray-200"
                 }`}
               >
                 {route.label}
