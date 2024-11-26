@@ -134,18 +134,20 @@ export const CreateModal = () => {
 
   const handleSubmit = async () => {
     // Validate all fields
-    const requiredFields: (keyof ProductSchema)[] = [
-      "name",
-      "description",
-      "designStyleId",
-      "unitTypeId",
-      "locationId",
+    const requiredFields: [keyof ProductSchema, string][] = [
+      ["name", "Name"],
+      ["description", "Description"],
+      ["designStyleId", "Design Style"],
+      ["unitTypeId", "Unit Type"],
+      ["locationId", "Location"],
     ];
-    const missingFields = requiredFields.filter(
-      (field) =>
-        !formState[field] ||
-        (typeof formState[field] === "number" && formState[field] === 0)
-    );
+    const missingFields = requiredFields
+      .filter(
+        (field) =>
+          !formState[field[0]] ||
+          (typeof formState[field[0]] === "number" && formState[field[0]] === 0)
+      )
+      .map((field) => field[1]);
 
     if (missingFields.length > 0) {
       setErrors([
@@ -212,14 +214,6 @@ export const CreateModal = () => {
       <Button onClick={openModal}>Add</Button>
       <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New Product">
         <form className="space-y-4">
-          {errors.length > 0 && (
-            <div className="bg-red-100 text-red-700 p-2 rounded">
-              {errors.map((error, index) => (
-                <p key={index}>{error}</p>
-              ))}
-            </div>
-          )}
-
           <div>
             <Label>Product Name</Label>
             <Input
@@ -325,6 +319,13 @@ export const CreateModal = () => {
               </div>
             )}
           </div>
+          {errors.length > 0 && (
+            <div className="bg-red-100 text-red-700 p-2 rounded">
+              {errors.map((error, index) => (
+                <p key={index}>{error}</p>
+              ))}
+            </div>
+          )}
           <div className="flex justify-end space-x-2">
             <Button type="button" onClick={closeModal}>
               Cancel

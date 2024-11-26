@@ -12,7 +12,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white w-11/12 max-w-md p-6 rounded-lg shadow-lg">
+      <div className="bg-white w-11/12 max-w-md p-6 rounded-lg shadow-lg max-h-screen my-10">
         {/* Header */}
         <div className="flex justify-between items-center border-b pb-3">
           <h3 className="text-lg font-bold">{title}</h3>
@@ -26,12 +26,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
         </div>
 
         {/* Content */}
-        <div className="mt-4">{children}</div>
+        <div className="mt-4 max-h-[80vh] overflow-y-auto">{children}</div>
 
         {/* Footer */}
-        <div className="mt-6 flex justify-end">
-
-				</div>
+        <div className="mt-6 flex justify-end"></div>
       </div>
     </div>
   );
