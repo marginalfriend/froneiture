@@ -66,9 +66,9 @@ export async function GET(req: NextRequest) {
 							path: true
 						}
 					},
-					designStyle: true,
-					unitType: true,
-					location: true
+					designStyle: { select: { name: true } },
+					unitType: { select: { name: true } },
+					location: { select: { name: true } }
 				},
 				orderBy: { name: 'asc' }
 			}),

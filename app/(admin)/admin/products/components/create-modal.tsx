@@ -239,8 +239,8 @@ export const CreateModal = () => {
               value={String(formState.designStyleId)}
               onChange={(e) => handleChange("designStyleId", e.target.value)}
               options={[
-                { label: "Design 1", value: "1" },
-                { label: "Design 2", value: "2" },
+                { name: "Design 1", id: "1" },
+                { name: "Design 2", id: "2" },
               ]}
             />
           </div>
@@ -253,8 +253,8 @@ export const CreateModal = () => {
               value={String(formState.unitTypeId)}
               onChange={(e) => handleChange("unitTypeId", e.target.value)}
               options={[
-                { label: "Unit 1", value: "1" },
-                { label: "Unit 2", value: "2" },
+                { name: "Unit 1", id: "1" },
+                { name: "Unit 2", id: "2" },
               ]}
             />
           </div>
@@ -267,8 +267,8 @@ export const CreateModal = () => {
               value={String(formState.locationId)}
               onChange={(e) => handleChange("locationId", e.target.value)}
               options={[
-                { label: "Location 1", value: "1" },
-                { label: "Location 2", value: "2" },
+                { name: "Location 1", id: "1" },
+                { name: "Location 2", id: "2" },
               ]}
             />
           </div>

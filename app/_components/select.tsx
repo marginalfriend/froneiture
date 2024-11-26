@@ -3,7 +3,7 @@ import React from "react";
 interface SelectProps {
   name: string;
   id?: string;
-  options: { value: string; label: string }[];
+  options: { id: string; name: string }[] | never[];
   placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   value?: string;
@@ -19,7 +19,7 @@ const Select: React.FC<SelectProps> = (props) => {
     placeholder = "Select an option",
     onChange,
     value,
-  } = props;	
+  } = props;
   return (
     <div className={`relative w-64 ${className}`}>
       <select
@@ -30,13 +30,13 @@ const Select: React.FC<SelectProps> = (props) => {
         value={value}
       >
         {placeholder && (
-          <option value="" className="text-gray-500">
+          <option value="" className="text-gray-500" key={"placeholder"}>
             {placeholder}
           </option>
         )}
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
+          <option key={option.id} value={option.id}>
+            {option.name}
           </option>
         ))}
       </select>
