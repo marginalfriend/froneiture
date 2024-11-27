@@ -19,17 +19,28 @@ export const DesignStylesTable = () => {
             </tr>
           </thead>
           <tbody>
-            {designStyles.map((type) => (
-              <tr
-                key={type.id}
-                className="border-b hover:bg-gray-50 transition-colors"
-              >
-                <td className="text-left p-3">{type.name}</td>
-                <td className="text-right p-3">
-                  <UpdateModal unitType={type} />
+            {designStyles[0] ? (
+              designStyles.map((type) => (
+                <tr
+                  key={type.id}
+                  className="border-b hover:bg-gray-50 transition-colors"
+                >
+                  <td className="text-left p-3">{type.name}</td>
+                  <td className="text-right p-3">
+                    <UpdateModal unitType={type} />
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={2}
+                  className="py-10 text-center items-center text-gray-600"
+                >
+                  No design styles found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

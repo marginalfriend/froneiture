@@ -1,9 +1,10 @@
-import React from 'react'
+"use client";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-	return (
-		<div>Page</div>
-	)
-}
+  const router = useRouter();
 
-export default Page
+  return router.push("/admin/products");
+};
+
+export default Page;
