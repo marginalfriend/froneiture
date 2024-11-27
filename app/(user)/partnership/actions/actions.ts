@@ -20,4 +20,6 @@ export async function sendPartnership(formData: z.infer<typeof formSchema>) {
 	const data = await prisma.partnership.create({
 		data: formData
 	})
+
+	return data
 }

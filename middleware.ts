@@ -1,28 +1,29 @@
 // middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verify } from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'fallback_secret');
 
-export function middleware(req: NextRequest) {
-	// Check if the path starts with /admin
-	if (req.nextUrl.pathname.startsWith('/admin') || req.nextUrl.pathname.startsWith('/api')) {
-		// Get the auth token from cookies
+export async function middleware(req: NextRequest) {
+	// Skip authentication for /api/auth routes
+	if (req.nextUrl.pathname.startsWith('/api/auth')) {
+		return NextResponse.next();
+	}
+
+	// Secure /admin and /api routes
+	if (req.nextUrl.pathname.startsWith('/admin') ||
+		(req.nextUrl.pathname.startsWith('/api') && !req.nextUrl.pathname.startsWith('/api/auth'))) {
 		const token = req.cookies.get('auth_token')?.value;
 
-		// If no token, redirect to login
 		if (!token) {
 			return NextResponse.redirect(new URL('/login', req.url));
 		}
 
 		try {
-			// Verify the token
-			verify(token, JWT_SECRET);
+			await jwtVerify(token, JWT_SECRET);
 			return NextResponse.next();
-		} catch (error) {
-			console.log(error)
-			// Invalid token, redirect to login
+		} catch {
 			return NextResponse.redirect(new URL('/login', req.url));
 		}
 	}
@@ -30,7 +31,6 @@ export function middleware(req: NextRequest) {
 	return NextResponse.next();
 }
 
-// Specify which routes this middleware should run on
 export const config = {
-	matcher: ['/admin/:path*', '/api/:path*'],
+	matcher: ['/admin/:path*', '/api/:path*']
 };
