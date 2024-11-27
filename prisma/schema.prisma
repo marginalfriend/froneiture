@@ -62,12 +62,6 @@ model UnitType {
   Product Product[]
 }
 
-model Location {
-  id      Int       @id @default(autoincrement())
-  name    String
-  Product Product[]
-}
-
 model DesignStyle {
   id      Int       @id @default(autoincrement())
   name    String
@@ -82,8 +76,6 @@ model Product {
   designStyleId Int
   unitType      UnitType      @relation(fields: [unitTypeId], references: [id])
   unitTypeId    Int
-  location      Location      @relation(fields: [locationId], references: [id])
-  locationId    Int
   images        Image[]
   OrderDetail   OrderDetail[]
   Cart          Cart[]

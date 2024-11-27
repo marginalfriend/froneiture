@@ -38,7 +38,7 @@ export const CreateModal = () => {
     try {
       if (!formState.name) return setError(true);
 
-      const response = await fetch("/api/unit/type", {
+      const response = await fetch("/api/unit/design-style", {
         method: "POST",
         body: JSON.stringify({ ...formState }),
       });
@@ -56,10 +56,14 @@ export const CreateModal = () => {
   return (
     <>
       <Button onClick={openModal}>Add</Button>
-      <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New Unit Type">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title="Add New Design Style"
+      >
         <form className="space-y-4 px-1">
           <div>
-            <Label>Unit Type Name</Label>
+            <Label>Design Style Name</Label>
             <Input
               required
               placeholder="Type product name here"

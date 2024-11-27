@@ -10,12 +10,11 @@ export async function POST(req: NextRequest) {
 			description,
 			designStyleId,
 			unitTypeId,
-			locationId,
 			imageIds
 		} = await req.json();
 
 		// Validate required fields
-		if (!name || !description || !designStyleId || !unitTypeId || !locationId) {
+		if (!name || !description || !designStyleId || !unitTypeId) {
 			return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
 		}
 
@@ -26,7 +25,6 @@ export async function POST(req: NextRequest) {
 				description,
 				designStyleId: Number(designStyleId),
 				unitTypeId: Number(unitTypeId),
-				locationId: Number(locationId),
 				images: imageIds ? {
 					connect: imageIds.map((id: string) => ({
 						id: id
@@ -37,7 +35,6 @@ export async function POST(req: NextRequest) {
 				images: true,
 				designStyle: true,
 				unitType: true,
-				location: true
 			}
 		});
 
@@ -63,12 +60,12 @@ export async function GET(req: NextRequest) {
 				include: {
 					images: {
 						select: {
-							path: true
+							id: true,
+							path: true,
 						}
 					},
 					designStyle: { select: { name: true } },
 					unitType: { select: { name: true } },
-					location: { select: { name: true } }
 				},
 				orderBy: { name: 'asc' }
 			}),
@@ -90,53 +87,41 @@ export async function GET(req: NextRequest) {
 	}
 }
 
-// Get Single Product
-// export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-// 	try {
-// 		const product = await prisma.product.findUnique({
-// 			where: { id: params.id },
-// 			include: {
-// 				images: true,
-// 				designStyle: true,
-// 				unitType: true,
-// 				location: true
-// 			}
-// 		});
-
-// 		if (!product) {
-// 			return NextResponse.json({ error: 'Product not found' }, { status: 404 });
-// 		}
-
-// 		return NextResponse.json(product);
-// 	} catch (error) {
-// 		console.error('Get Product error:', error);
-// 		return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 });
-// 	}
-// }
-
 // Update Product
 export async function PUT(req: NextRequest) {
 	try {
+		const reqData = await req.json();
+		console.log(reqData)
 		const {
 			id,
 			name,
 			description,
 			designStyleId,
 			unitTypeId,
-			locationId,
-			images
-		} = await req.json();
+			images,
+			deletedImageIds // New parameter to specify images to be deleted
+		} = reqData
+
 
 		if (!id) {
 			return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
 		}
 
-		// Update product with optional image management
+		if (deletedImageIds && deletedImageIds[0]) {
+			const baseUrl = process.env.BASE_URL
+			const ids = deletedImageIds.join(",")
+			const url = `${baseUrl}/api/image?ids=${ids}`
+			await fetch(url, {
+				method: "DELETE",
+			})
+
+			console.log("I'm done fetching!!!!!")
+		}
+
+		// Update product with selective image management
 		const product = await prisma.$transaction(async (prisma) => {
-			// First, delete existing images if new images are provided
-			if (images) {
-				await prisma.image.deleteMany({ where: { productId: id } });
-			}
+			console.log("I'm inside here!!!!!")
+			// Delete specific images if deletedImageIds is provided
 
 			// Update product
 			return prisma.product.update({
@@ -146,8 +131,7 @@ export async function PUT(req: NextRequest) {
 					description,
 					designStyleId: designStyleId ? Number(designStyleId) : undefined,
 					unitTypeId: unitTypeId ? Number(unitTypeId) : undefined,
-					locationId: locationId ? Number(locationId) : undefined,
-					images: images ? {
+					images: images[0] ? {
 						create: images.map((image: Image) => ({
 							fileName: image.fileName,
 							path: image.path,
@@ -163,7 +147,6 @@ export async function PUT(req: NextRequest) {
 					images: true,
 					designStyle: true,
 					unitType: true,
-					location: true
 				}
 			});
 		});

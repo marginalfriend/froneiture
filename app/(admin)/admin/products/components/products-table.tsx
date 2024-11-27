@@ -1,0 +1,109 @@
+"use client";
+
+import Image from "next/image";
+import React, { useCallback, useEffect, useState } from "react";
+import { UpdateModal } from "./update-modal";
+
+const ProductsTable: React.FC = () => {
+  const [products, setProducts] = useState<ProductCardProps[]>([]);
+
+  const fetchImages = useCallback(async () => {
+    try {
+      const response = await fetch("/api/product");
+
+      const { ok, status } = response;
+
+      if (!ok) throw "Error fetching products: " + status;
+
+      const { data } = await response.json();
+
+      setProducts(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchImages();
+  }, [fetchImages]);
+  return (
+    <div className="w-full mx-auto mt-6">
+      <div className="bg-white shadow-md rounded-lg overflow-hidden">
+        <table className="w-full">
+          {/* Table Header */}
+          <thead className="bg-gray-100 border-b">
+            <tr>
+              <th className="p-3 text-left hidden md:table-cell">Image</th>
+              <th className="p-3 text-left">Name</th>
+              <th className="p-3 text-left hidden md:table-cell">
+                Design Style
+              </th>
+              <th className="p-3 text-left hidden lg:table-cell">Unit Type</th>
+              <th className="p-3 text-left">Description</th>
+              <th className="p-3 text-left">Action</th>
+            </tr>
+          </thead>
+
+          {/* Table Body */}
+          <tbody>
+            {products[0] ? (
+              products.map((item, index) => (
+                <tr
+                  key={index}
+                  className="border-b hover:bg-gray-50 transition-colors"
+                >
+                  {/* Image Column - Hidden on small screens */}
+                  <td className="p-3 hidden md:table-cell">
+                    {item.images ? (
+                      <Image
+                        src={item.images[0].path}
+                        alt={item.name + " image"}
+                        width={100}
+                        height={100}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 text-gray-300" />
+                    )}
+                  </td>
+
+                  {/* Name Column */}
+                  <td className="p-3 font-medium text-gray-900">{item.name}</td>
+
+                  {/* Design Style Column - Hidden on small screens */}
+                  <td className="p-3 text-gray-600 hidden md:table-cell">
+                    {item.designStyle.name}
+                  </td>
+
+                  {/* Unit Type Column - Hidden on larger small screens */}
+                  <td className="p-3 text-gray-600 hidden lg:table-cell">
+                    {item.unitType.name}
+                  </td>
+
+                  {/* Description Column */}
+                  <td className="p-3 text-gray-500 text-sm">
+                    {item.description}
+                  </td>
+                  <td className="p-3 text-gray-500 text-sm">
+                    <UpdateModal product={item}/>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="py-10 text-center items-center text-gray-600"
+                >
+                  No products found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default ProductsTable;

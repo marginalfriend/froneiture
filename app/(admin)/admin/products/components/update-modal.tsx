@@ -8,32 +8,29 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 
-interface ProductSchema {
+interface UpdateProductSchema {
+  id: string;
   name: string;
   description: string;
   designStyleId: number;
   unitTypeId: number;
   images: File[];
+  existingImages: { id: string; path: string }[];
 }
 
-interface CreateProduct {
-  name: string;
-  description: string;
-  designStyleId: number;
-  unitTypeId: number;
-  imageIds: string[];
-}
-
-export const CreateModal = () => {
+export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [formState, setFormState] = useState<ProductSchema>({
-    name: "",
-    description: "",
-    designStyleId: 0,
-    unitTypeId: 0,
+  const [formState, setFormState] = useState<UpdateProductSchema>({
+    id: product.id,
+    name: product.name, // Pre-fill with existing product data
+    description: product.description,
+    designStyleId: product.designStyleId,
+    unitTypeId: product.unitTypeId,
     images: [],
+    existingImages: product.images || [], // Initialize with existing images
   });
   const [previews, setPreviews] = useState<string[]>([]);
+  const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]); // Track deleted images
   const [errors, setErrors] = useState<string[]>([]);
   const [designStyles, setDesignStyles] = useState([]);
   const [unitTypes, setUnitTypes] = useState([]);
@@ -62,22 +59,24 @@ export const CreateModal = () => {
   const MAX_FILE_SIZE = 2.5 * 1024 * 1024; // 2.5MB
   const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => {
-    setModalOpen(false);
-    resetForm();
+  const openModal = () => {
+    // Reset to initial product state when opening
+    setFormState({
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      designStyleId: product.designStyleId,
+      unitTypeId: product.unitTypeId,
+      images: [],
+      existingImages: product.images || [],
+    });
+    setDeletedImageIds([]);
+    setPreviews([]);
+    setModalOpen(true);
   };
 
-  const resetForm = () => {
-    setFormState({
-      name: "",
-      description: "",
-      designStyleId: 0,
-      unitTypeId: 0,
-      images: [],
-    });
-    setPreviews([]);
-    setErrors([]);
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
   const validateFiles = (files: FileList | null) => {
@@ -133,15 +132,32 @@ export const CreateModal = () => {
     }
   };
 
-  const removeImage = (indexToRemove: number) => {
-    setFormState((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, index) => index !== indexToRemove),
-    }));
-    setPreviews((prev) => prev.filter((_, index) => index !== indexToRemove));
+  const removeImage = (indexToRemove: number, isExisting: boolean = false) => {
+    if (isExisting) {
+      // For existing images, add to deleted images list
+      const imageToDelete = formState.existingImages[indexToRemove];
+      setDeletedImageIds((prev) => [...prev, imageToDelete.id]);
+
+      setFormState((prev) => ({
+        ...prev,
+        existingImages: prev.existingImages.filter(
+          (_, index) => index !== indexToRemove
+        ),
+      }));
+    } else {
+      // For newly added images
+      setFormState((prev) => ({
+        ...prev,
+        images: prev.images.filter((_, index) => index !== indexToRemove),
+      }));
+      setPreviews((prev) => prev.filter((_, index) => index !== indexToRemove));
+    }
   };
 
-  const handleChange = (key: keyof ProductSchema, value: string | File) => {
+  const handleChange = (
+    key: keyof UpdateProductSchema,
+    value: string | File
+  ) => {
     if (typeof formState[key] === "number") {
       setFormState((prev) => ({ ...prev, [key]: parseInt(value as string) }));
     } else {
@@ -150,22 +166,18 @@ export const CreateModal = () => {
   };
 
   const handleSubmit = async () => {
-    // Validate all fields
-    const requiredFields: [keyof ProductSchema, string][] = [
+    // Validate required fields
+    const requiredFields: [keyof UpdateProductSchema, string][] = [
       ["name", "Name"],
       ["description", "Description"],
       ["designStyleId", "Design Style"],
       ["unitTypeId", "Unit Type"],
-      ["images", "Image"],
     ];
     const missingFields = requiredFields
       .filter(
         (field) =>
           !formState[field[0]] ||
-          (typeof formState[field[0]] === "number" &&
-            formState[field[0]] === 0) ||
-          (typeof formState[field[0]] === "object" &&
-            !(formState[field[0]] as File[])[0])
+          (typeof formState[field[0]] === "number" && formState[field[0]] === 0)
       )
       .map((field) => field[1]);
 
@@ -177,8 +189,8 @@ export const CreateModal = () => {
     }
 
     try {
-      // Upload images first
-      const imageUploadPromises = formState.images.map(async (file) => {
+      // Upload new images
+      const newImageUploadPromises = formState.images.map(async (file) => {
         const formData = new FormData();
         formData.append("file", file);
 
@@ -192,39 +204,48 @@ export const CreateModal = () => {
         }
 
         const data = await response.json();
-        return data.id;
+        return data;
       });
 
-      const imageIds = await Promise.all(imageUploadPromises);
-      console.log("Image ids:", imageIds);
+      const newImageData = await Promise.all(newImageUploadPromises);
 
-      // Prepare product data
-      const productData: CreateProduct = {
+      // Prepare product update data
+      const productUpdateData = {
+        id: product.id,
         name: formState.name,
         description: formState.description,
         designStyleId: formState.designStyleId,
         unitTypeId: formState.unitTypeId,
-        imageIds,
+        images: newImageData.map((img) => ({
+          fileName: img.fileName,
+          path: img.path,
+          size: img.size,
+          mimeType: img.mimeType,
+          width: img.width,
+          height: img.height,
+          description: img.description,
+        })),
+        deletedImageIds, // Include ids of images to be deleted
       };
 
-      // Submit product
+      // Submit product update
       const productResponse = await fetch("/api/product", {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(productData),
+        body: JSON.stringify(productUpdateData),
       });
 
       if (!productResponse.ok) {
-        throw new Error("Product creation failed");
+        throw new Error("Product update failed");
       }
 
-      // Reset form and close modal on success
+      // Close modal on success
       closeModal();
     } catch (error) {
       console.error("Submission error:", error);
-      setErrors(["Failed to create product. Please try again."]);
+      setErrors(["Failed to update product. Please try again."]);
     }
   };
 
@@ -232,9 +253,13 @@ export const CreateModal = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    console.log(deletedImageIds);
+  }, [deletedImageIds, formState]);
+
   return (
     <>
-      <Button onClick={openModal}>Add</Button>
+      <Button onClick={openModal}>Update</Button>
       <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New Product">
         <form className="space-y-4 px-1">
           <div>
@@ -276,7 +301,12 @@ export const CreateModal = () => {
             />
           </div>
           <div>
-            <Label>Images {`(${formState.images.length}/${MAX_IMAGES})`}</Label>
+            <Label>
+              Images{" "}
+              {`(${
+                formState.existingImages.length + formState.images.length
+              }/${MAX_IMAGES})`}
+            </Label>
             <div
               className="border-2 border-dashed p-4 rounded-lg flex items-center justify-center"
               onClick={() => fileInputRef.current?.click()}
@@ -297,6 +327,34 @@ export const CreateModal = () => {
                 <p className="text-red-500">Maximum images reached</p>
               )}
             </div>
+
+            {/* Render existing images */}
+            {formState.existingImages.length > 0 && (
+              <div className="overflow-x-auto">
+                <div className="flex gap-2 mt-2 w-max">
+                  {formState.existingImages.map((image, index) => (
+                    <div key={image.id} className="relative">
+                      <Image
+                        src={image.path}
+                        alt={`Existing image ${index + 1}`}
+                        width={100}
+                        height={100}
+                        className="object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index, true)}
+                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Render new image previews */}
             {previews.length > 0 && (
               <div className="overflow-x-auto">
                 <div className="flex gap-2 mt-2 w-max">
@@ -334,7 +392,7 @@ export const CreateModal = () => {
               Cancel
             </Button>
             <Button type="button" onClick={handleSubmit}>
-              Create Product
+              Update Product
             </Button>
           </div>
         </form>

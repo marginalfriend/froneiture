@@ -15,7 +15,6 @@ declare global {
 		description: string;
 		designStyleId: number;
 		unitTypeId: number;
-		locationId: number;
 		imageIds: string[];
 	}
 
@@ -24,7 +23,7 @@ declare global {
 	}
 
 	interface ProductCardProps extends Product {
-		images: { path: string }[];
+		images: { id: string; path: string }[];
 		location: { name: string };
 		designStyle: { name: string };
 		unitType: { name: string };
