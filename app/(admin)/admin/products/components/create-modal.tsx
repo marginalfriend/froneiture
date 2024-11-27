@@ -4,9 +4,10 @@ import { Button } from "@/app/_components/button";
 import { Input, Label } from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
 import Select from "@/app/_components/select";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
+import { useData } from "../context";
 
 interface ProductSchema {
   name: string;
@@ -35,26 +36,7 @@ export const CreateModal = () => {
   });
   const [previews, setPreviews] = useState<string[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
-  const [designStyles, setDesignStyles] = useState([]);
-  const [unitTypes, setUnitTypes] = useState([]);
-
-  const fetchData = async () => {
-    try {
-      const designRes = await fetch("/api/unit/design-style");
-
-      const { data: designs } = await designRes.json();
-
-      setDesignStyles(designs);
-
-      const unitTypeRes = await fetch("/api/unit/type");
-
-      const { data: types } = await unitTypeRes.json();
-
-      setUnitTypes(types);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { trigger, designStyles, unitTypes } = useData();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -221,16 +203,13 @@ export const CreateModal = () => {
       }
 
       // Reset form and close modal on success
+      trigger();
       closeModal();
     } catch (error) {
       console.error("Submission error:", error);
       setErrors(["Failed to create product. Please try again."]);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <>
@@ -307,7 +286,7 @@ export const CreateModal = () => {
                         alt={`Preview ${index + 1}`}
                         width={100}
                         height={100}
-                        className="object-cover rounded-lg"
+                        className="object-cover rounded-lg w-32 h-32"
                       />
                       <button
                         type="button"

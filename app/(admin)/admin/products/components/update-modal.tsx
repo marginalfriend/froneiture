@@ -4,9 +4,10 @@ import { Button } from "@/app/_components/button";
 import { Input, Label } from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
 import Select from "@/app/_components/select";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { Pencil, X } from "lucide-react";
+import { useData } from "../context";
 
 interface UpdateProductSchema {
   id: string;
@@ -32,26 +33,7 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
   const [previews, setPreviews] = useState<string[]>([]);
   const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]); // Track deleted images
   const [errors, setErrors] = useState<string[]>([]);
-  const [designStyles, setDesignStyles] = useState([]);
-  const [unitTypes, setUnitTypes] = useState([]);
-
-  const fetchData = async () => {
-    try {
-      const designRes = await fetch("/api/unit/design-style");
-
-      const { data: designs } = await designRes.json();
-
-      setDesignStyles(designs);
-
-      const unitTypeRes = await fetch("/api/unit/type");
-
-      const { data: types } = await unitTypeRes.json();
-
-      setUnitTypes(types);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { designStyles, unitTypes, trigger } = useData();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -242,6 +224,7 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
       }
 
       // Close modal on success
+      trigger();
       closeModal();
     } catch (error) {
       console.error("Submission error:", error);
@@ -249,17 +232,32 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const handleDelete = async () => {
+    try {
+      const url = `/api/product?id=${product.id}`;
 
-  useEffect(() => {
-    console.log(deletedImageIds);
-  }, [deletedImageIds, formState]);
+      const options: RequestInit = {
+        method: "DELETE",
+      };
+
+      const response = await fetch(url, options);
+
+      const { status, ok } = response;
+
+      if (!ok) throw "Error deleting product: " + status;
+
+      closeModal();
+      trigger();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
-      <Button onClick={openModal}>Update</Button>
+      <Button onClick={openModal} className="w-min px-2" variant="outline">
+        <Pencil size={"14px"} />
+      </Button>
       <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New Product">
         <form className="space-y-4 px-1">
           <div>
@@ -332,50 +330,29 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
             {formState.existingImages.length > 0 && (
               <div className="overflow-x-auto">
                 <div className="flex gap-2 mt-2 w-max">
-                  {formState.existingImages.map((image, index) => (
-                    <div key={image.id} className="relative">
-                      <Image
-                        src={image.path}
-                        alt={`Existing image ${index + 1}`}
-                        width={100}
-                        height={100}
-                        className="object-cover rounded-lg"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(index, true)}
-                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                  {[...formState.existingImages, ...previews].map(
+                    (image, index) => (
+                      <div
+                        key={typeof image === "string" ? image : image.id}
+                        className="relative"
                       >
-                        <X size={16} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Render new image previews */}
-            {previews.length > 0 && (
-              <div className="overflow-x-auto">
-                <div className="flex gap-2 mt-2 w-max">
-                  {previews.map((preview, index) => (
-                    <div key={index} className="relative">
-                      <Image
-                        src={preview}
-                        alt={`Preview ${index + 1}`}
-                        width={100}
-                        height={100}
-                        className="object-cover rounded-lg"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(index)}
-                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
-                  ))}
+                        <Image
+                          src={typeof image === "string" ? image : image.path}
+                          alt={`Preview ${index + 1}`}
+                          width={100}
+                          height={100}
+                          className="object-cover rounded-lg w-32 h-32"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index, true)}
+                          className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1"
+                        >
+                          <X size={10} />
+                        </button>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             )}
@@ -388,10 +365,10 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
             </div>
           )}
           <div className="flex justify-end space-x-2">
-            <Button type="button" onClick={closeModal}>
-              Cancel
+            <Button type="button" onClick={handleDelete}>
+              Delete
             </Button>
-            <Button type="button" onClick={handleSubmit}>
+            <Button type="submit" onClick={handleSubmit}>
               Update Product
             </Button>
           </div>

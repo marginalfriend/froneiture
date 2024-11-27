@@ -1,31 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import React, { useCallback, useEffect, useState } from "react";
 import { UpdateModal } from "./update-modal";
+import { useData } from "../context";
 
 const ProductsTable: React.FC = () => {
-  const [products, setProducts] = useState<ProductCardProps[]>([]);
+  const { products, isLoading } = useData();
 
-  const fetchImages = useCallback(async () => {
-    try {
-      const response = await fetch("/api/product");
-
-      const { ok, status } = response;
-
-      if (!ok) throw "Error fetching products: " + status;
-
-      const { data } = await response.json();
-
-      setProducts(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchImages();
-  }, [fetchImages]);
   return (
     <div className="w-full mx-auto mt-6">
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
@@ -85,10 +66,19 @@ const ProductsTable: React.FC = () => {
                     {item.description}
                   </td>
                   <td className="p-3 text-gray-500 text-sm">
-                    <UpdateModal product={item}/>
+                    <UpdateModal product={item} />
                   </td>
                 </tr>
               ))
+            ) : isLoading && !products ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="py-10 text-center items-center text-gray-600"
+                >
+                  Loading products...
+                </td>
+              </tr>
             ) : (
               <tr>
                 <td

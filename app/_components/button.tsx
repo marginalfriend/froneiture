@@ -8,13 +8,15 @@ export const Button = (props: ButtonProps) => {
   const getVariant = (variant?: ButtonVariants) => {
     switch (variant) {
       case "primary":
-        return "bg-primary text-white rounded-full shadow hover:brightness-125";
+        return "bg-primary text-white rounded-full shadow hover:brightness-150";
       case "secondary":
         return "bg-white text-black rounded-full shadow hover:brightness-50";
       case "ghost":
         return "bg-transparent text-black rounded-full hover:bg-gray-100";
+      case "outline":
+        return "bg-white border text-black rounded-full shadow hover:brightness-90";
       default:
-        return "bg-primary text-white rounded-full shadow";
+        return "bg-primary text-white rounded-full shadow hover:brightness-150";
     }
   };
 

@@ -91,7 +91,6 @@ export async function GET(req: NextRequest) {
 export async function PUT(req: NextRequest) {
 	try {
 		const reqData = await req.json();
-		console.log(reqData)
 		const {
 			id,
 			name,
@@ -115,12 +114,10 @@ export async function PUT(req: NextRequest) {
 				method: "DELETE",
 			})
 
-			console.log("I'm done fetching!!!!!")
 		}
 
 		// Update product with selective image management
 		const product = await prisma.$transaction(async (prisma) => {
-			console.log("I'm inside here!!!!!")
 			// Delete specific images if deletedImageIds is provided
 
 			// Update product
