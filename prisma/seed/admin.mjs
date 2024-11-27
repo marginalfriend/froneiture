@@ -25,8 +25,13 @@ async function createSuperAdmin() {
 }
 
 async function main() {
-	await seedAdminRoles();
+	console.log("Creating admin account for FroNeiture")
+
 	await createSuperAdmin();
+
+	console.log("Admin account created")
+	console.log("Email:", admin.email)
+	console.log("Password:", admin.password)
 }
 
 main()
