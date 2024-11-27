@@ -12,16 +12,16 @@ const ProductsTable: React.FC = () => {
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <table className="w-full">
           {/* Table Header */}
-          <thead className="bg-gray-100 border-b">
+          <thead className="bg-primary text-white border-b">
             <tr>
-              <th className="p-3 text-left hidden md:table-cell">Image</th>
-              <th className="p-3 text-left">Name</th>
-              <th className="p-3 text-left hidden md:table-cell">
+              <th className="p-3 font-medium text-left hidden md:table-cell">Image</th>
+              <th className="p-3 font-medium text-left">Name</th>
+              <th className="p-3 font-medium text-left hidden md:table-cell">
                 Design Style
               </th>
-              <th className="p-3 text-left hidden lg:table-cell">Unit Type</th>
-              <th className="p-3 text-left">Description</th>
-              <th className="p-3 text-left">Action</th>
+              <th className="p-3 font-medium text-left hidden lg:table-cell">Unit Type</th>
+              <th className="p-3 font-medium text-left">Description</th>
+              <th className="p-3 font-medium text-left">Action</th>
             </tr>
           </thead>
 
@@ -34,7 +34,7 @@ const ProductsTable: React.FC = () => {
                   className="border-b hover:bg-gray-50 transition-colors"
                 >
                   {/* Image Column - Hidden on small screens */}
-                  <td className="p-3 hidden md:table-cell">
+                  <td className="p-3">
                     {item.images ? (
                       <Image
                         src={item.images[0].path}

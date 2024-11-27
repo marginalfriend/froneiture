@@ -5,14 +5,14 @@ import { Input, Label } from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
 import React, { useState } from "react";
 
-interface UnitTypeSchema {
+interface DesignStyleSchema {
   name: string;
 }
 
 export const CreateModal = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState(false);
-  const [formState, setFormState] = useState<UnitTypeSchema>({
+  const [formState, setFormState] = useState<DesignStyleSchema>({
     name: "",
   });
 

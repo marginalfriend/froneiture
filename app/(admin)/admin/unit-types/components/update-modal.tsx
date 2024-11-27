@@ -5,35 +5,29 @@ import { Input, Label } from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
 import React, { useState } from "react";
 import { useData } from "../context";
+import { UnitType } from "@prisma/client";
+import { Pencil } from "lucide-react";
 
 interface UnitTypeSchema {
+  id: number;
   name: string;
 }
 
-export const CreateModal = () => {
+export const UpdateModal = ({ unitType }: { unitType: UnitType }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState(false);
-  const [formState, setFormState] = useState<UnitTypeSchema>({
-    name: "",
-  });
+  const [formState, setFormState] = useState<UnitTypeSchema>(unitType);
   const { trigger } = useData();
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => {
     setModalOpen(false);
     setError(false);
-    resetForm();
-  };
-
-  const resetForm = () => {
-    setFormState({
-      name: "",
-    });
   };
 
   const handleChange = (e: string) => {
     setError(false);
-    setFormState({ name: e });
+    setFormState({ id: unitType.id, name: e });
   };
 
   const handleSubmit = async () => {
@@ -41,7 +35,7 @@ export const CreateModal = () => {
       if (!formState.name) return setError(true);
 
       const response = await fetch("/api/unit/type", {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({ ...formState }),
       });
 
@@ -58,15 +52,17 @@ export const CreateModal = () => {
 
   return (
     <>
-      <Button onClick={openModal}>Add</Button>
+      <Button onClick={openModal} className="w-min px-2" variant="outline">
+        <Pencil size={"14px"} />
+      </Button>
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
         title="Add New Unit Type"
       >
         <form className="space-y-4 px-1">
-          <div>
-            <Label>Unit Type Name</Label>
+          <div className="flex flex-col text-left gap-1">
+            <Label className="text-left">Unit Type Name</Label>
             <Input
               required
               placeholder="Type product name here"
@@ -80,11 +76,8 @@ export const CreateModal = () => {
             </div>
           )}
           <div className="flex justify-end space-x-2">
-            <Button type="button" onClick={closeModal}>
-              Cancel
-            </Button>
-            <Button type="button" onClick={handleSubmit}>
-              Create
+            <Button type="submit" onClick={handleSubmit}>
+              Update
             </Button>
           </div>
         </form>
