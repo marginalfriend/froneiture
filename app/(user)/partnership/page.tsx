@@ -4,6 +4,7 @@ import { Button } from "@/app/_components/button";
 import { Input, Label } from "@/app/_components/input";
 import React, { useState } from "react";
 import { z } from "zod";
+import { sendPartnership } from "./actions/actions";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -53,6 +54,7 @@ const Page = () => {
 
     if (error) return setErrors(error.formErrors);
 
+    await sendPartnership(data);
     try {
     } catch (e) {
       console.log(e);

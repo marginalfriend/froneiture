@@ -21,5 +21,7 @@ export async function sendPartnership(formData: z.infer<typeof formSchema>) {
 		data: formData
 	})
 
+	console.log(data)
+
 	return data
 }
