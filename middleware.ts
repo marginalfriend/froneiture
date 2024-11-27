@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 export function middleware(req: NextRequest) {
 	// Check if the path starts with /admin
-	if (req.nextUrl.pathname.startsWith('/admin')) {
+	if (req.nextUrl.pathname.startsWith('/admin') || req.nextUrl.pathname.startsWith('/api')) {
 		// Get the auth token from cookies
 		const token = req.cookies.get('auth_token')?.value;
 
@@ -32,5 +32,5 @@ export function middleware(req: NextRequest) {
 
 // Specify which routes this middleware should run on
 export const config = {
-	matcher: '/admin/:path*'
+	matcher: ['/admin/:path*', '/api/:path*'],
 };

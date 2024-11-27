@@ -30,7 +30,10 @@ const Page = () => {
   });
 
   const handleChange = (key: keyof typeof formState, value: string) => {
-    setFormState((prev) => ({ ...prev, [key]: value }));
+    setFormState((prev: z.infer<typeof formSchema>) => ({
+      ...prev,
+      [key]: value,
+    }));
   };
 
   const getErrorMessage = (key: keyof typeof formState) => {
@@ -44,20 +47,18 @@ const Page = () => {
   };
 
   const handleSubmit = async () => {
-		setIsSubmitting(true)
+    setIsSubmitting(true);
     setErrors(undefined);
     const { data, error } = formSchema.safeParse(formState);
 
     if (error) return setErrors(error.formErrors);
 
-		
-
     try {
     } catch (e) {
       console.log(e);
     } finally {
-			setIsSubmitting(false)
-		}
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -146,7 +147,12 @@ const Page = () => {
             )}
           </div>
           <div className="sm:col-span-2 flex justify-end mt-6">
-            <Button type="submit" className="w-[30%]" onClick={handleSubmit} disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className="w-[30%]"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
               Submit
             </Button>
           </div>
