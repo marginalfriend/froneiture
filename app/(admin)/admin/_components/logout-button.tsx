@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/app/_components/button";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export const LogoutButton = () => {
