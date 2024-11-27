@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 
 export const Filter = () => {
   const [designStyles, setDesignStyles] = useState([]);
-  const [cities, setCities] = useState([]);
+  const [unitType, setUnitType] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -15,11 +15,11 @@ export const Filter = () => {
 
       setDesignStyles(designs);
 
-      const locationRes = await fetch("/api/unit/location");
+      const unitTypeRes = await fetch("/api/unit/type");
 
-      const { data: locations } = await locationRes.json();
+      const { data: types } = await unitTypeRes.json();
 
-      setCities(locations);
+      setUnitType(types);
     } catch (error) {
       console.log(error);
     }
@@ -30,13 +30,13 @@ export const Filter = () => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row justify-center gap-4">
+    <div className="flex flex-col align-middle items-center md:flex-row justify-center gap-4">
       <Select
         name={"Design Styles"}
         placeholder="Design Styles"
         options={designStyles}
       />
-      <Select name={"Cities"} placeholder="Cities" options={cities} />
+      <Select name={"Unit Type"} placeholder="Unit Type" options={unitType} />
     </div>
   );
 };

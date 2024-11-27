@@ -1,7 +1,6 @@
 export const routes = {
 	admin:
 		[
-			{ route: "/admin", label: "Dashboard" },
 			{ route: "/admin/products", label: "Products" },
 			{ route: "/admin/unit-types", label: "Unit Type" },
 			{ route: "/admin/design-styles", label: "Design Style" },
@@ -13,7 +12,7 @@ export const routes = {
 			{ route: "/products", label: "Products" },
 			{ route: "/about", label: "About" },
 			{ route: "/contact", label: "Contact" },
-			{ route: "/order", label: "Order" },
+			{ route: "/partnership", label: "Partnership" },
 		]
 
 }

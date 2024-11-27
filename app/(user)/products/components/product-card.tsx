@@ -5,7 +5,7 @@ import React from "react";
 
 const ProductCard: React.FC<ProductCardProps> = ({
   name,
-  location,
+  designStyle,
   images,
 	
 }) => {
@@ -24,7 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Content */}
       <div className="p-4">
         <h3 className="text-lg font-bold text-gray-800">{name}</h3>
-        <p className="text-sm text-gray-500">{location.name}</p>
+        <p className="text-sm text-gray-500">{designStyle.name}</p>
         {/* Button */}
         <div className="mt-4 flex justify-start">
           <Button variant="primary">Detail</Button>

@@ -9,7 +9,7 @@ export const UserNavlinks = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="w-[60%] h-full hidden md:flex align-middle my-auto">
+    <nav className="w-[50%] h-full hidden md:flex align-middle my-auto self-center">
       <ul className="inline-flex justify-between w-full font-medium	text-sm">
         {routes.user.map((route) => (
           <li key={route.route}>
