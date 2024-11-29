@@ -38,14 +38,12 @@ export default function Home() {
         </div>
 
         <div className="space-y-4 col-span-1">
-          <h1 className="text-xl font-bold">About Us</h1>
+          <h1 className="text-xl font-bold">Home</h1>
           <ul className="space-y-1 text-gray-500">
-            <li>Service</li>
-            <li>Projects</li>
-            <li>Blog</li>
-            <li>For Business</li>
-            <li>Design Style</li>
-            <li>Terms & Condition</li>
+            <li>Products</li>
+            <li>About</li>
+            <li>Contact</li>
+            <li>Partnership</li>
           </ul>
         </div>
 

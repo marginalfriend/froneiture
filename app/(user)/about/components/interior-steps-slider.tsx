@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface Step {
   id: number;
@@ -14,28 +15,41 @@ const steps: Step[] = [
     id: 1,
     title: "Consultation",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed metus malesuada, dapibus sem ac, bibendum tortor. Pellentesque augue est, efficitur lobortis ultricies id, consectetur vel erat. Nullam id erat diam.",
+      "Schedule a free consultation with our interior design experts to discuss your project, either in person at our office or online. Be sure to prepare your room layout and inspiration references for your dream interior!",
     imageSrc: "/steps-1.png",
   },
   {
     id: 2,
     title: "Survey & Design",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed metus malesuada, dapibus sem ac, bibendum tortor. Pellentesque augue est, efficitur lobortis ultricies id, consectetur vel erat. Nullam id erat diam.",
+      "We provide a survey service to capture precise measurements of your building, allowing us to develop an initial design and mood board tailored to your project vision.",
     imageSrc: "/steps-2.png",
   },
-  // Add more steps as needed
+  {
+    id: 3,
+    title: "Production & Installation",
+    description:
+      "Once you approve the proposed design, production will commence upon a 50% down payment. Installation will begin after the remaining balance has been fully settled.",
+    imageSrc: "/steps-2.png",
+  },
+  {
+    id: 4,
+    title: "Move In",
+    description:
+      "Your new interior will be ready for use following production, as scheduled in the agreed timeline.",
+    imageSrc: "/steps-2.png",
+  },
 ];
 
 const InteriorStepsSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % steps.length);
+    setCurrentSlide((prev) => (prev + 1) % (steps.length / 2));
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + steps.length) % steps.length);
+    setCurrentSlide((prev) => (prev - 1 + (steps.length / 2)) % (steps.length / 2));
   };
 
   return (
@@ -50,7 +64,7 @@ const InteriorStepsSlider = () => {
           onClick={prevSlide}
           className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-brown-600 hover:bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors"
           aria-label="Previous slide"
-					title="Steps previous slide"
+          title="Steps previous slide"
         >
           <svg
             className="w-6 h-6"
@@ -71,7 +85,7 @@ const InteriorStepsSlider = () => {
           onClick={nextSlide}
           className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-brown-600 hover:bg-brown-700 text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors"
           aria-label="Next slide"
-					title="Steps next slide"
+          title="Steps next slide"
         >
           <svg
             className="w-6 h-6"
@@ -89,16 +103,27 @@ const InteriorStepsSlider = () => {
         </button>
 
         {/* Slides Container */}
-        <div className="overflow-hidden w-[100%] md:w-[75%] h-[388px] md:h-[500px]">
+        <div className="overflow-hidden w-full h-[388px] md:h-[520px]">
           <div
-            className="flex transition-transform duration-300 ease-in-out"
+            className={cn(
+              `flex transition-transform duration-300 ease-in-out w-full w-[${
+                steps.length * 100
+              }%]`
+            )}
             style={{
               transform: `translateX(-${currentSlide * 100}%)`,
             }}
           >
             {steps.map((step) => (
-              <div key={step.id} className="w-full md:w-[50%] flex-shrink-0 px-4 md:px-8">
-                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div
+                key={step.id}
+                className="w-full md:w-[50%] flex flex-col flex-shrink-0 px-4 md:px-8"
+              >
+                <div
+                  className={cn(
+                    `bg-white rounded-xl shadow-lg overflow-hidden h-full`
+                  )}
+                >
                   <div className="relative aspect-[3/2] w-full">
                     <Image
                       src={step.imageSrc}
@@ -107,13 +132,15 @@ const InteriorStepsSlider = () => {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
-                    <div className="absolute bottom-4 right-4 w-12 h-12 bg-brown-600 text-white rounded-full flex items-center justify-center text-xl font-bold">
+                    <div className="absolute bottom-4 right-4 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold -mb-10">
                       {step.id}
                     </div>
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                    <p className="text-xs md:text-sm text-gray-600">{step.description}</p>
+                    <p className="text-xs md:text-sm text-gray-600">
+                      {step.description}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -123,12 +150,12 @@ const InteriorStepsSlider = () => {
 
         {/* Dots Indicator */}
         <div className="flex justify-center mt-8 space-x-2">
-          {steps.map((_, index) => (
+          {[1, 2].map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`w-2 h-2 rounded-full transition-colors ${
-                currentSlide === index ? "bg-brown-600" : "bg-gray-300"
+                currentSlide === index ? "bg-primary" : "bg-gray-300"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

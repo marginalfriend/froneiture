@@ -1,15 +1,11 @@
 // components/ProductCard.tsx
 import { Button } from "@/app/_components/button";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  name,
-  designStyle,
-  images,
-	
-}) => {
-  console.log(images);
+const ProductCard: React.FC<ProductCardProps> = (props) => {
+  const { name, designStyle, images } = props;
   return (
     <div className="border border-gray-300 rounded-3xl overflow-hidden shadow-md bg-white">
       {/* Image */}
@@ -27,7 +23,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <p className="text-sm text-gray-500">{designStyle.name}</p>
         {/* Button */}
         <div className="mt-4 flex justify-start">
-          <Button variant="primary">Detail</Button>
+          <Link href={`/products/${props.id}`} >
+            <Button variant="primary">Detail</Button>
+          </Link>
         </div>
       </div>
     </div>

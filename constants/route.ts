@@ -2,8 +2,9 @@ export const routes = {
 	admin:
 		[
 			{ route: "/admin/products", label: "Products" },
-			{ route: "/admin/unit-types", label: "Unit Type" },
 			{ route: "/admin/design-styles", label: "Design Style" },
+			{ route: "/admin/unit-types", label: "Unit Type" },
+			{ route: "/admin/inquiry", label: "Inquiry" },
 			{ route: "/admin/partnership", label: "Partnership" },
 
 		],

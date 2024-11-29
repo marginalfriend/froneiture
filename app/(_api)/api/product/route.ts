@@ -46,40 +46,25 @@ export async function POST(req: NextRequest) {
 }
 
 // Get Products
-export async function GET(req: NextRequest) {
+export async function GET() {
 	try {
-		const { searchParams } = new URL(req.url);
-		const page = parseInt(searchParams.get('page') || '1');
-		const limit = parseInt(searchParams.get('limit') || '10');
-		const skip = (page - 1) * limit;
 
-		const [products, total] = await Promise.all([
-			prisma.product.findMany({
-				skip,
-				take: limit,
-				include: {
-					images: {
-						select: {
-							id: true,
-							path: true,
-						}
-					},
-					designStyle: { select: { name: true } },
-					unitType: { select: { name: true } },
+		const products = await prisma.product.findMany({
+			include: {
+				images: {
+					select: {
+						id: true,
+						path: true,
+					}
 				},
-				orderBy: { name: 'asc' }
-			}),
-			prisma.product.count()
-		]);
+				designStyle: { select: { name: true } },
+				unitType: { select: { name: true } },
+			},
+			orderBy: { name: 'asc' }
+		})
 
 		return NextResponse.json({
-			data: products,
-			meta: {
-				total,
-				page,
-				limit,
-				totalPages: Math.ceil(total / limit)
-			}
+			data: products
 		});
 	} catch (error) {
 		console.error('Get Products error:', error);

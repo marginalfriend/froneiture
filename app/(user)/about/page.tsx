@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "../../_components/button";
 import InteriorStepsSlider from "./components/interior-steps-slider";
+import Link from "next/link";
 
 const Page = () => {
   return (
@@ -14,25 +15,23 @@ const Page = () => {
             ditujukan untuk Konsumen Akhir dan Pengembang Real Estat di sektor
             perumahan di wilayah Jabodetabek.
           </p>
-          <Button variant="primary">Contact Us</Button>
+          <Link href={"/contact"}>
+            <Button variant="primary" className="mt-4">Contact Us</Button>
+          </Link>
         </div>
 
         <div className="col-span-1 md:col-span-2 flex flex-col md:flex-row w-full gap-6">
           <StatCard
             imageSrc="/about-1.png"
             number="1000+"
-            text="Interior Projects Done"
+            text="Interior Projects"
           />
           <StatCard
             imageSrc="/about-2.png"
             number="25000+"
-            text="Sq.m Constructed"
+            text="Room Transformation"
           />
-          <StatCard
-            imageSrc="/about-3.png"
-            number="9+"
-            text="B2B Projects Deal"
-          />
+          <StatCard imageSrc="/about-3.png" number="9+" text="B2B Projects" />
         </div>
       </div>
       <InteriorStepsSlider />
@@ -48,7 +47,7 @@ interface StatCardProps {
   imageSrc: string;
 }
 
-const StatCard = ({ number, text, imageSrc }: StatCardProps) => (
+const StatCard = ({ text, imageSrc }: StatCardProps) => (
   <div className="relative w-[246px] md:w-[264px] aspect-[13/20] rounded-3xl overflow-hidden group">
     {/* Background Image */}
     <Image
@@ -60,9 +59,8 @@ const StatCard = ({ number, text, imageSrc }: StatCardProps) => (
     />
 
     {/* Content Overlay */}
-    <div className="relative z-10 h-full p-6 flex flex-col items-start justify-end bg-gradient-to-t from-black/50 to-transparent">
-      <h3 className="text-4xl font-bold text-white mb-2">{number}</h3>
-      <p className="text-white/90 text-sm">{text}</p>
+    <div className="relative z-10 h-full p-6 flex flex-col items-center justify-center bg-gradient-to-t from-transparent via-black/50 to-transparent">
+      <p className="text-white/90 font-bold">{text}</p>
     </div>
   </div>
 );
