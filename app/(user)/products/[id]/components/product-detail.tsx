@@ -3,6 +3,7 @@
 import { Button } from "@/app/_components/button";
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import { InquiryForm } from "./inquire";
 
 export const ProductDetail = ({ productId }: { productId: string }) => {
   const [product, setProduct] = useState<ProductCardProps | undefined>();
@@ -64,7 +65,7 @@ export const ProductDetail = ({ productId }: { productId: string }) => {
               </div>
             </div>
             <div className="flex justify-end">
-              <Button variant="primary">Inquire</Button>
+              <InquiryForm productId={productId} />
             </div>
           </div>
           <div>

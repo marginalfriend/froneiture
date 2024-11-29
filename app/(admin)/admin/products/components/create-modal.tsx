@@ -36,6 +36,7 @@ export const CreateModal = () => {
   });
   const [previews, setPreviews] = useState<string[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
+	const [isSubmitting, setIsSubmitting] = useState(false)
   const { trigger, designStyles, unitTypes } = useData();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -132,6 +133,7 @@ export const CreateModal = () => {
   };
 
   const handleSubmit = async () => {
+		setIsSubmitting(true)
     // Validate all fields
     const requiredFields: [keyof ProductSchema, string][] = [
       ["name", "Name"],
@@ -208,7 +210,9 @@ export const CreateModal = () => {
     } catch (error) {
       console.error("Submission error:", error);
       setErrors(["Failed to create product. Please try again."]);
-    }
+    } finally {
+			setIsSubmitting(false)
+		}
   };
 
   return (
@@ -312,7 +316,7 @@ export const CreateModal = () => {
             <Button type="button" onClick={closeModal}>
               Cancel
             </Button>
-            <Button type="button" onClick={handleSubmit}>
+            <Button type="button" onClick={handleSubmit} disabled={isSubmitting}>
               Create Product
             </Button>
           </div>

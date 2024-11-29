@@ -16,8 +16,8 @@ datasource db {
 // Account Management
 
 model Account {
-  id       String        @id @default(uuid())
-  email    String        @unique
+  id       String @id @default(uuid())
+  email    String @unique
   password String
 }
 
@@ -36,14 +36,15 @@ model DesignStyle {
 }
 
 model Product {
-  id            String        @id @default(uuid())
+  id            String      @id @default(uuid())
   name          String
   description   String
-  designStyle   DesignStyle   @relation(fields: [designStyleId], references: [id])
+  designStyle   DesignStyle @relation(fields: [designStyleId], references: [id])
   designStyleId Int
-  unitType      UnitType      @relation(fields: [unitTypeId], references: [id])
+  unitType      UnitType    @relation(fields: [unitTypeId], references: [id])
   unitTypeId    Int
   images        Image[]
+  Inquiry       Inquiry[]
 }
 
 model Image {
@@ -68,4 +69,13 @@ model Partnership {
   phoneNumber String
   address     String
   reference   String?
+}
+
+model Inquiry {
+  id          Int     @id @default(autoincrement())
+  name        String
+  email       String
+  phoneNumber String
+  product     Product @relation(fields: [productId], references: [id])
+  productId   String
 }

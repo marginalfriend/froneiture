@@ -3,15 +3,14 @@
 import prisma from "@/prisma/client/prisma";
 
 interface FormSchema {
+	productId: string;
 	name: string;
 	email: string;
 	phoneNumber: string;
-	address: string;
-	reference: string;
 }
 
-export async function sendPartnership(formData: FormSchema) {
-	const data = await prisma.partnership.create({
+export async function sendInquiry(formData: FormSchema) {
+	const data = await prisma.inquiry.create({
 		data: formData
 	})
 
