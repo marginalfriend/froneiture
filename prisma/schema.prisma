@@ -71,10 +71,16 @@ model Partnership {
   reference   String?
 }
 
+enum Status {
+  PENDING
+  PAID
+}
+
 model Inquiry {
   id          Int     @id @default(autoincrement())
   name        String
   email       String
+  status      Status  @default(PENDING)
   phoneNumber String
   product     Product @relation(fields: [productId], references: [id])
   productId   String

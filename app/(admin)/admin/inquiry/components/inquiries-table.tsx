@@ -1,14 +1,23 @@
 "use client";
 
-import { Partnership } from "@prisma/client";
+import { Inquiry } from "@prisma/client";
 import { useCallback, useEffect, useState } from "react";
+import { Status } from "./status";
 
-const PartnershipsTable: React.FC = () => {
-  const [partnerShips, setPartnerships] = useState<Partnership[]>([]);
+export interface InquiryData extends Inquiry {
+  product: {
+    id: string;
+    name: string;
+  };
+  status: "PENDING" | "PAID";
+}
+
+const InquiriesTable: React.FC = () => {
+  const [inquiries, setInquiries] = useState<InquiryData[]>([]);
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch("/api/partnership");
+      const response = await fetch("/api/inquiry");
 
       const { status, ok } = response;
 
@@ -16,7 +25,7 @@ const PartnershipsTable: React.FC = () => {
 
       const { data } = await response.json();
 
-      setPartnerships(data);
+      setInquiries(data);
     } catch (error) {
       console.log(error);
     }
@@ -24,46 +33,39 @@ const PartnershipsTable: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
   return (
     <div className="w-full mx-auto mt-6">
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <table className="w-full">
-          {/* Table Header */}
           <thead className="bg-primary text-white border-b">
             <tr>
               <th className="p-3 font-medium text-left">Name</th>
               <th className="p-3 font-medium text-left">Email</th>
               <th className="p-3 font-medium text-left">Phone</th>
-              <th className="p-3 font-medium text-left">Reference</th>
-              <th className="p-3 font-medium text-left">Address</th>
+              <th className="p-3 font-medium text-left">Product</th>
+              <th className="p-3 font-medium text-left">Status</th>
             </tr>
           </thead>
-
-          {/* Table Body */}
           <tbody>
-            {partnerShips[0] ? (
-              partnerShips.map((item, index) => (
+            {inquiries[0] ? (
+              inquiries.map((item, index) => (
                 <tr
                   key={index}
                   className="border-b hover:bg-gray-50 transition-colors"
                 >
-                  <td className="p-3 font-medium text-gray-900 text-sm">
-                    {item.name}
+                  <td className="p-3 text-gray-600">{item.name}</td>
+
+                  <td className="p-3 text-gray-600">{item.email}</td>
+
+                  <td className="p-3 text-gray-600">{item.phoneNumber}</td>
+
+                  <td className="p-3 text-gray-600">
+                    {item.product.name}
                   </td>
 
-                  <td className="p-3 text-gray-600 text-sm">{item.email}</td>
-
-                  <td className="p-3 text-gray-600 text-sm">
-                    {item.phoneNumber}
-                  </td>
-
-                  <td className="p-3 text-gray-500 text-sm">
-                    {item.reference}
-                  </td>
-
-                  <td className="p-3 text-gray-500 text-sm w-80">
-                    <p className="line-clamp-3">{item.address}</p>
+                  <td className="p-3 text-gray-600">
+                    <Status inquiry={item} refetch={fetchData}/>
                   </td>
                 </tr>
               ))
@@ -84,4 +86,4 @@ const PartnershipsTable: React.FC = () => {
   );
 };
 
-export default PartnershipsTable;
+export default InquiriesTable;

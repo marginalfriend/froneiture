@@ -8,6 +8,7 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { Pencil, X } from "lucide-react";
 import { useData } from "../context";
+import swal from "sweetalert";
 
 interface UpdateProductSchema {
   id: string;
@@ -226,6 +227,7 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
       // Close modal on success
       trigger();
       closeModal();
+			swal("Success", "Product updated", "success")
     } catch (error) {
       console.error("Submission error:", error);
       setErrors(["Failed to update product. Please try again."]);
@@ -245,13 +247,28 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
       const { status, ok } = response;
 
       if (!ok) throw "Error deleting product: " + status;
-
-      closeModal();
-      trigger();
     } catch (error) {
       console.log(error);
     }
   };
+
+  const onDelete = () =>
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover",
+      icon: "warning",
+      buttons: [true, true],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        handleDelete().then(() => {
+          swal("Success", "Product deleted", "success");
+          closeModal();
+          trigger();
+        });
+      } else {
+      }
+    });
 
   return (
     <>
@@ -365,7 +382,7 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
             </div>
           )}
           <div className="flex justify-end space-x-2">
-            <Button type="button" onClick={handleDelete}>
+            <Button type="button" onClick={onDelete}>
               Delete
             </Button>
             <Button type="submit" onClick={handleSubmit}>

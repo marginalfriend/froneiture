@@ -54,8 +54,9 @@ const Page = () => {
 
     if (error) return setErrors(error.formErrors);
 
-    await sendPartnership(data);
     try {
+			await sendPartnership(data);
+			swal("Success", "Partnership form sent", "success")
     } catch (e) {
       console.log(e);
     } finally {

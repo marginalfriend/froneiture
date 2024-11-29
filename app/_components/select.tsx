@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import React from "react";
 
 interface SelectProps {
@@ -21,7 +22,7 @@ const Select: React.FC<SelectProps> = (props) => {
     value,
   } = props;
   return (
-    <div className={`relative w-64 ${className}`}>
+    <div className={cn("relative w-64", className)}>
       <select
         name={name}
         id={id || name}

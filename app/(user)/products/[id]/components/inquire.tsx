@@ -6,6 +6,7 @@ import Modal from "@/app/_components/modal";
 import { useState } from "react";
 import { z } from "zod";
 import { sendInquiry } from "../actions/actions";
+import swal from "sweetalert";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -73,6 +74,7 @@ export const InquiryForm = ({ productId }: { productId: string }) => {
     try {
 			await sendInquiry(data);
 			closeModal()
+			swal("Success", "Inquiry sent", "success")
     } catch (e) {
       console.log(e);
     } finally {

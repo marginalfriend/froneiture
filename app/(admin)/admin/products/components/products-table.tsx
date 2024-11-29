@@ -14,12 +14,16 @@ const ProductsTable: React.FC = () => {
           {/* Table Header */}
           <thead className="bg-primary text-white border-b">
             <tr>
-              <th className="p-3 font-medium text-left hidden md:table-cell">Image</th>
+              <th className="p-3 font-medium text-left hidden md:table-cell">
+                Image
+              </th>
               <th className="p-3 font-medium text-left">Name</th>
               <th className="p-3 font-medium text-left hidden md:table-cell">
                 Design Style
               </th>
-              <th className="p-3 font-medium text-left hidden lg:table-cell">Unit Type</th>
+              <th className="p-3 font-medium text-left hidden lg:table-cell">
+                Unit Type
+              </th>
               <th className="p-3 font-medium text-left">Description</th>
               <th className="p-3 font-medium text-left">Action</th>
             </tr>
@@ -62,8 +66,8 @@ const ProductsTable: React.FC = () => {
                   </td>
 
                   {/* Description Column */}
-                  <td className="p-3 text-gray-500 text-sm">
-                    {item.description}
+                  <td className="p-3 text-gray-500 text-sm w-60">
+                    <p className="line-clamp-2">{item.description}</p>
                   </td>
                   <td className="p-3 text-gray-500 text-sm">
                     <UpdateModal product={item} />

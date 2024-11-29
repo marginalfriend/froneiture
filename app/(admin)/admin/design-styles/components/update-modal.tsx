@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { useData } from "../context";
 import { UnitType } from "@prisma/client";
 import { Pencil } from "lucide-react";
+import swal from "sweetalert";
 
 interface UnitTypeSchema {
   id: number;
@@ -45,6 +46,7 @@ export const UpdateModal = ({ unitType }: { unitType: UnitType }) => {
 
       trigger();
       closeModal();
+      swal("Success", "Success updated design style", "success");
     } catch (error) {
       console.log(error);
     }

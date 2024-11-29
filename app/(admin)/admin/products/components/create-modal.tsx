@@ -8,6 +8,7 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { useData } from "../context";
+import swal from "sweetalert";
 
 interface ProductSchema {
   name: string;
@@ -207,6 +208,7 @@ export const CreateModal = () => {
       // Reset form and close modal on success
       trigger();
       closeModal();
+			swal("Success", "Product created", "success")
     } catch (error) {
       console.error("Submission error:", error);
       setErrors(["Failed to create product. Please try again."]);
