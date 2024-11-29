@@ -11,6 +11,11 @@ export async function middleware(req: NextRequest) {
 		return NextResponse.next();
 	}
 
+	// Allowed GET API
+	if ((req.nextUrl.pathname.startsWith('/api/product') || req.nextUrl.pathname.startsWith('/api/unit')) && req.method === "GET") {
+		return NextResponse.next()
+	}
+
 	// Secure /admin and /api routes
 	if (req.nextUrl.pathname.startsWith('/admin') ||
 		(req.nextUrl.pathname.startsWith('/api') && !req.nextUrl.pathname.startsWith('/api/auth'))) {
