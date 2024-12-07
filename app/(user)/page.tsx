@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -40,10 +41,18 @@ export default function Home() {
         <div className="space-y-4 col-span-1">
           <h1 className="text-xl font-bold">Home</h1>
           <ul className="space-y-1 text-gray-500">
-            <li>Products</li>
-            <li>About</li>
-            <li>Contact</li>
-            <li>Partnership</li>
+            <li>
+              <Link href={"/products"}>Products</Link>
+            </li>
+            <li>
+              <Link href={"/about"}>About</Link>
+            </li>
+            <li>
+              <Link href={"/contact"}>Contact</Link>
+            </li>
+            <li>
+              <Link href={"/partnership"}>Partnership</Link>
+            </li>
           </ul>
         </div>
 
@@ -56,7 +65,7 @@ export default function Home() {
               World Capital Tower, Jl. Mega Kuningan Barat, 11th Floor, Jakarta
               Selatan, 12950
             </p>
-          </div>	
+          </div>
         </div>
 
         <div className="space-y-4 col-span-1">
