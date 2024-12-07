@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "../../_components/button";
+import Link from "next/link";
 
 const Page = () => {
   return (
@@ -25,14 +26,22 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 px-32 gap-10 py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 px-4 md:px-32 gap-10 py-12">
         <div className="border-2 border-primary rounded-2xl text-center space-y-4 px-6 py-8">
           <h1 className="font-semibold text-xl">Interior Consultation</h1>
           <p>
             Schedule a free consultation with our interior experts to bring your
             dream space to life.
           </p>
-          <Button className="font-medium">Chat Sales Consultant</Button>
+          <div>
+            <Link
+              href={
+                "https://wa.me/+62182371291292?text=Hi%20Froneiture%2C%20I%20need%20assistance%20with%20your%20interior%20design%20services."
+              }
+            >
+              <Button className="font-medium">Chat Sales Consultant</Button>
+            </Link>
+          </div>
         </div>
         <div className="border-2 border-primary rounded-2xl text-center space-y-4 px-6 py-8">
           <h1 className="font-semibold text-xl">Customer Support</h1>
@@ -48,7 +57,11 @@ const Page = () => {
             Be part of our mission to create stunning interiors through ax``
             meaningful collaboration.
           </p>
-          <Button className="font-medium">Partnership Form</Button>
+          <div>
+            <Link href={"/partnership"}>
+              <Button className="font-medium">Partnership Form</Button>
+            </Link>
+          </div>
         </div>
       </div>
     </main>
