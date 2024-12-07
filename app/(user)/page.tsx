@@ -56,7 +56,7 @@ export default function Home() {
               World Capital Tower, Jl. Mega Kuningan Barat, 11th Floor, Jakarta
               Selatan, 12950
             </p>
-          </div>
+          </div>	
         </div>
 
         <div className="space-y-4 col-span-1">
