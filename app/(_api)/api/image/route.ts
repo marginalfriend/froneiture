@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { mkdir, access } from 'fs/promises';
 import { join } from 'path';
 import { CreateImageDTO, DEFAULT_IMAGE_VALIDATION } from './image-types';
 import prisma from '@/prisma/client/prisma';
 import { unlink } from "node:fs/promises";
-import { promises } from 'fs';
+import { createClient } from '@supabase/supabase-js';
 
-// Ensure upload directory exists
-async function ensureUploadDirectory() {
-	const uploadDir = join(process.cwd(), 'public', 'uploads');
-	try {
-		await access(uploadDir);
-	} catch {
-		await mkdir(uploadDir, { recursive: true });
-	}
-	return uploadDir;
-}
+const supabase = createClient(
+	process.env.NEXT_PUBLIC_SUPABASE_URL!,
+	process.env.SUPABASE_API_KEY!
+);
 
 // Validate image file
 function validateImage(file: File): { isValid: boolean; error?: string } {
@@ -38,6 +31,12 @@ function generateUniqueFilename(originalName: string): string {
 
 export async function POST(req: NextRequest) {
 	try {
+		const supabaseUser = await supabase.auth.getUser()
+		console.log("Starting upload image...")
+		console.log("Supabase URL: ", process.env.NEXT_PUBLIC_SUPABASE_URL)
+		console.log("Supabase Key: ", process.env.SUPABASE_API_KEY)
+		console.log("Supabase User: ", supabaseUser)
+
 		const formData = await req.formData();
 		const file = formData.get('file') as File;
 		const productId = formData.get('productId') as string;
@@ -45,25 +44,46 @@ export async function POST(req: NextRequest) {
 		if (!file) {
 			return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
 		}
+		console.log("File received.")
 
 		if (!validateImage(file)) {
 			return NextResponse.json({ error: 'Invalid file' }, { status: 400 });
 		}
+		console.log("File is valid")
 
-		const uploadDir = await ensureUploadDirectory();
+		// Generate a unique filename
 		const uniqueFilename = generateUniqueFilename(file.name);
-		const filePath = join(uploadDir, uniqueFilename);
-		const relativePath = `/uploads/${uniqueFilename}`;
+		console.log("Filename generated: ", uniqueFilename)
 
-		// Write file
+		// Convert file to buffer
 		const arrayBuffer = await file.arrayBuffer();
-		const buffer = Buffer.from(arrayBuffer)
-		await promises.writeFile(filePath, buffer);
+		const buffer = Buffer.from(arrayBuffer);
+		console.log("Converted image to buffer.")
 
-		// Create image record
+		// Upload to Supabase storage
+		const { data: uploadData, error: uploadError } = await supabase.storage
+			.from('images') // Replace with your actual bucket name
+			.upload(uniqueFilename, buffer, {
+				cacheControl: '3600',
+				upsert: false
+			});
+		console.log("Image uploaded to supabase. Path: ", uploadData?.fullPath)
+
+		if (uploadError) {
+			console.error('Supabase upload error:', uploadError);
+			return NextResponse.json({ error: 'File upload failed' }, { status: 500 });
+		}
+
+		// Get public URL
+		const { data: { publicUrl } } = supabase.storage
+			.from('images')
+			.getPublicUrl(uniqueFilename);
+		console.log("Public URL received: ", publicUrl)
+
+		// Create image record in database
 		const imageData: CreateImageDTO = {
 			fileName: uniqueFilename,
-			path: relativePath,
+			path: publicUrl,
 			size: file.size,
 			mimeType: file.type,
 			width: undefined,
@@ -71,8 +91,10 @@ export async function POST(req: NextRequest) {
 			description: null,
 			productId: productId || undefined
 		};
+		console.log("Image data ready to be saved into database")
 
 		const image = await prisma.image.create({ data: imageData });
+		console.log("Image data saved in database. Sending response...")
 
 		return NextResponse.json(image, { status: 201 });
 
