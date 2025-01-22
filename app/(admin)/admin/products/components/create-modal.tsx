@@ -12,6 +12,7 @@ import swal from "sweetalert";
 
 interface ProductSchema {
   name: string;
+  price: number;
   description: string;
   designStyleId: number;
   unitTypeId: number;
@@ -20,6 +21,7 @@ interface ProductSchema {
 
 interface CreateProduct {
   name: string;
+  price: number;
   description: string;
   designStyleId: number;
   unitTypeId: number;
@@ -30,6 +32,7 @@ export const CreateModal = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [formState, setFormState] = useState<ProductSchema>({
     name: "",
+    price: 0,
     description: "",
     designStyleId: 0,
     unitTypeId: 0,
@@ -37,7 +40,7 @@ export const CreateModal = () => {
   });
   const [previews, setPreviews] = useState<string[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
-	const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { trigger, designStyles, unitTypes } = useData();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -55,6 +58,7 @@ export const CreateModal = () => {
   const resetForm = () => {
     setFormState({
       name: "",
+      price: 0,
       description: "",
       designStyleId: 0,
       unitTypeId: 0,
@@ -125,7 +129,10 @@ export const CreateModal = () => {
     setPreviews((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
-  const handleChange = (key: keyof ProductSchema, value: string | File) => {
+  const handleChange = (
+    key: keyof ProductSchema,
+    value: string | File | number
+  ) => {
     if (typeof formState[key] === "number") {
       setFormState((prev) => ({ ...prev, [key]: parseInt(value as string) }));
     } else {
@@ -134,7 +141,7 @@ export const CreateModal = () => {
   };
 
   const handleSubmit = async () => {
-		setIsSubmitting(true)
+    setIsSubmitting(true);
     // Validate all fields
     const requiredFields: [keyof ProductSchema, string][] = [
       ["name", "Name"],
@@ -186,6 +193,7 @@ export const CreateModal = () => {
       // Prepare product data
       const productData: CreateProduct = {
         name: formState.name,
+        price: formState.price,
         description: formState.description,
         designStyleId: formState.designStyleId,
         unitTypeId: formState.unitTypeId,
@@ -208,13 +216,13 @@ export const CreateModal = () => {
       // Reset form and close modal on success
       trigger();
       closeModal();
-			swal("Success", "Product created", "success")
+      swal("Success", "Product created", "success");
     } catch (error) {
       console.error("Submission error:", error);
       setErrors(["Failed to create product. Please try again."]);
     } finally {
-			setIsSubmitting(false)
-		}
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -258,6 +266,14 @@ export const CreateModal = () => {
               value={String(formState.unitTypeId)}
               onChange={(e) => handleChange("unitTypeId", e.target.value)}
               options={unitTypes}
+            />
+          </div>
+          <div>
+            <Label>Product Price</Label>
+            <Input
+              placeholder="1000000"
+              value={formState.name}
+              onChange={(e) => handleChange("price", Number(e.target.value))}
             />
           </div>
           <div>
@@ -318,8 +334,12 @@ export const CreateModal = () => {
             <Button type="button" onClick={closeModal}>
               Cancel
             </Button>
-            <Button type="button" onClick={handleSubmit} disabled={isSubmitting}>
-              Create Product
+            <Button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Creating..." : "Create Product"}
             </Button>
           </div>
         </form>

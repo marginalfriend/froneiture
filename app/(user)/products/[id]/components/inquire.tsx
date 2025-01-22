@@ -72,9 +72,9 @@ export const InquiryForm = ({ productId }: { productId: string }) => {
     if (error) return setErrors(error.formErrors);
 
     try {
-			await sendInquiry(data);
-			closeModal()
-			swal("Success", "Inquiry sent", "success")
+      await sendInquiry(data);
+      closeModal();
+      swal("Success", "Inquiry sent", "success");
     } catch (e) {
       console.log(e);
     } finally {
@@ -83,7 +83,7 @@ export const InquiryForm = ({ productId }: { productId: string }) => {
   };
   return (
     <>
-      <Button onClick={openModal}>Inquire</Button>
+      <Button onClick={openModal}>Order</Button>
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -135,7 +135,12 @@ export const InquiryForm = ({ productId }: { productId: string }) => {
               </p>
             )}
           </div>
-          <Button type="button" className="mt-2" onClick={handleSubmit} disabled={isSubmitting}>
+          <Button
+            type="button"
+            className="mt-2"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          >
             Inquire
           </Button>
         </form>

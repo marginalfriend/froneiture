@@ -24,6 +24,7 @@ const ProductsTable: React.FC = () => {
               <th className="p-3 font-medium text-left hidden lg:table-cell">
                 Unit Type
               </th>
+              <th className="p-3 font-medium text-left">Price</th>
               <th className="p-3 font-medium text-left">Description</th>
               <th className="p-3 font-medium text-left">Action</th>
             </tr>
@@ -64,6 +65,8 @@ const ProductsTable: React.FC = () => {
                   <td className="p-3 text-gray-600 hidden lg:table-cell">
                     {item.unitType.name}
                   </td>
+
+                  <td className="p-3 text-gray-600">{item.price}</td>
 
                   {/* Description Column */}
                   <td className="p-3 text-gray-500 text-sm w-60">

@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
 	try {
 		const {
 			name,
+			price,
 			description,
 			designStyleId,
 			unitTypeId,
@@ -23,6 +24,7 @@ export async function POST(req: NextRequest) {
 			data: {
 				name,
 				description,
+				price,
 				designStyleId: Number(designStyleId),
 				unitTypeId: Number(unitTypeId),
 				images: imageIds ? {
@@ -80,6 +82,7 @@ export async function PUT(req: NextRequest) {
 			id,
 			name,
 			description,
+			price,
 			designStyleId,
 			unitTypeId,
 			images,
@@ -111,6 +114,7 @@ export async function PUT(req: NextRequest) {
 				data: {
 					name,
 					description,
+					price,
 					designStyleId: designStyleId ? Number(designStyleId) : undefined,
 					unitTypeId: unitTypeId ? Number(unitTypeId) : undefined,
 					images: images[0] ? {

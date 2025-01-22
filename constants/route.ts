@@ -4,7 +4,7 @@ export const routes = {
 			{ route: "/admin/products", label: "Products" },
 			{ route: "/admin/design-styles", label: "Design Style" },
 			{ route: "/admin/unit-types", label: "Unit Type" },
-			{ route: "/admin/inquiry", label: "Inquiry" },
+			{ route: "/admin/inquiry", label: "Order" },
 			{ route: "/admin/partnership", label: "Partnership" },
 
 		],

@@ -40,6 +40,7 @@ model Product {
   id            String      @id @default(uuid())
   name          String
   description   String
+  price         Int         @default(0)
   designStyle   DesignStyle @relation(fields: [designStyleId], references: [id])
   designStyleId Int
   unitType      UnitType    @relation(fields: [unitTypeId], references: [id])

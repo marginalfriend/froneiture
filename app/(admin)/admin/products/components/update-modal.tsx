@@ -12,6 +12,7 @@ import swal from "sweetalert";
 
 interface UpdateProductSchema {
   id: string;
+  price: number;
   name: string;
   description: string;
   designStyleId: number;
@@ -24,6 +25,7 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [formState, setFormState] = useState<UpdateProductSchema>({
     id: product.id,
+    price: product.price,
     name: product.name, // Pre-fill with existing product data
     description: product.description,
     designStyleId: product.designStyleId,
@@ -47,6 +49,7 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
     setFormState({
       id: product.id,
       name: product.name,
+      price: product.price,
       description: product.description,
       designStyleId: product.designStyleId,
       unitTypeId: product.unitTypeId,
@@ -139,7 +142,7 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
 
   const handleChange = (
     key: keyof UpdateProductSchema,
-    value: string | File
+    value: string | File | number
   ) => {
     if (typeof formState[key] === "number") {
       setFormState((prev) => ({ ...prev, [key]: parseInt(value as string) }));
@@ -196,6 +199,7 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
       const productUpdateData = {
         id: product.id,
         name: formState.name,
+        price: formState.price,
         description: formState.description,
         designStyleId: formState.designStyleId,
         unitTypeId: formState.unitTypeId,
@@ -227,7 +231,7 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
       // Close modal on success
       trigger();
       closeModal();
-			swal("Success", "Product updated", "success")
+      swal("Success", "Product updated", "success");
     } catch (error) {
       console.error("Submission error:", error);
       setErrors(["Failed to update product. Please try again."]);
@@ -313,6 +317,14 @@ export const UpdateModal = ({ product }: { product: ProductCardProps }) => {
               value={String(formState.unitTypeId)}
               onChange={(e) => handleChange("unitTypeId", e.target.value)}
               options={unitTypes}
+            />
+          </div>
+          <div>
+            <Label>Product Price</Label>
+            <Input
+              placeholder="1000000"
+              value={formState.price}
+              onChange={(e) => handleChange("price", Number(e.target.value))}
             />
           </div>
           <div>
