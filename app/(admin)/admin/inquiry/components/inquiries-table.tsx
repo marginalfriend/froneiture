@@ -75,7 +75,7 @@ const InquiriesTable: React.FC = () => {
                   colSpan={5}
                   className="py-10 text-center items-center text-gray-600"
                 >
-                  No partnerships found
+                  No order found
                 </td>
               </tr>
             )}

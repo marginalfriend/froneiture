@@ -24,9 +24,9 @@ declare global {
 
 	interface ProductCardProps extends Product {
 		images: { id: string; path: string }[];
-		location: { name: string };
-		designStyle: { name: string };
-		unitType: { name: string };
+		location: { name: string, id: number };
+		designStyle: { name: string, id: number };
+		unitType: { name: string, id: number };
 	}
 
 	interface ResponseMeta {

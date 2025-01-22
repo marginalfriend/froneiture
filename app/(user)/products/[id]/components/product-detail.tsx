@@ -36,7 +36,6 @@ export const ProductDetail = ({ productId }: { productId: string }) => {
   if (isLoading) return <p>Loading product detail...</p>;
 
   if (!isLoading && product) {
-
     const handlePrevious = () => {
       setCurrentIndex((prevIndex) =>
         prevIndex === 0 ? product.images.length - 1 : prevIndex - 1
@@ -48,7 +47,7 @@ export const ProductDetail = ({ productId }: { productId: string }) => {
         prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
       );
     };
-		
+
     return (
       <div className="flex flex-col items-center">
         <div className="w-full max-w-[1000px] mt-8 mb-10 space-y-4">
@@ -62,6 +61,15 @@ export const ProductDetail = ({ productId }: { productId: string }) => {
               <div>
                 <p className="font-bold text-sm">Design Style</p>
                 <p>{product.designStyle.name}</p>
+              </div>
+              <div>
+                <p className="font-bold text-sm">Price</p>
+                <p>
+                  {product.price.toLocaleString("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                  })}
+                </p>
               </div>
             </div>
             <div className="flex justify-end">
