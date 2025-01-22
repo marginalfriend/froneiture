@@ -141,7 +141,7 @@ export const InquiryForm = ({ productId }: { productId: string }) => {
             onClick={handleSubmit}
             disabled={isSubmitting}
           >
-            Inquire
+            Order
           </Button>
         </form>
       </Modal>

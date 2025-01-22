@@ -2,10 +2,12 @@
 
 import Select from "@/app/_components/select";
 import React, { useEffect, useState } from "react";
+import { useFilter } from "../context";
 
 export const Filter = () => {
   const [designStyles, setDesignStyles] = useState([]);
   const [unitType, setUnitType] = useState([]);
+  const { handleFilter } = useFilter();
 
   const fetchData = async () => {
     try {
@@ -35,8 +37,14 @@ export const Filter = () => {
         name={"Design Styles"}
         placeholder="Design Styles"
         options={designStyles}
+        onChange={(e) => handleFilter("styleId", Number(e.target.value))}
       />
-      <Select name={"Unit Type"} placeholder="Unit Type" options={unitType} />
+      <Select
+        name={"Unit Type"}
+        placeholder="Unit Type"
+        options={unitType}
+        onChange={(e) => handleFilter("typeId", Number(e.target.value))}
+      />
     </div>
   );
 };

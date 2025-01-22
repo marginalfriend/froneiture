@@ -1,6 +1,7 @@
 import React from "react";
 import { Filter } from "./components/filter";
 import { ProductsTable } from "./components/products-table";
+import { FilterContextProvider } from "./context";
 
 const Page = () => {
   return (
@@ -13,8 +14,10 @@ const Page = () => {
             Where Innovation Meets Quality!
           </span>
         </h1>
-        <Filter />
-        <ProductsTable />
+        <FilterContextProvider>
+          <Filter />
+          <ProductsTable />
+        </FilterContextProvider>
       </div>
     </main>
   );

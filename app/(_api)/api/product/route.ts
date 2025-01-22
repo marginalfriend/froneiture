@@ -59,8 +59,8 @@ export async function GET() {
 						path: true,
 					}
 				},
-				designStyle: { select: { name: true } },
-				unitType: { select: { name: true } },
+				designStyle: true,
+				unitType: true,
 			},
 			orderBy: { name: 'asc' }
 		})
